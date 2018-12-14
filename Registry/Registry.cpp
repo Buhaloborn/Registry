@@ -84,28 +84,28 @@ public:
 			switch (state)//делаются различные действия в зависимости от состояния 
 			{
 			case right: {//состояние идти вправо 
-				dx = speed;
+				dx = speed; dy = 0;
 				CurrentFrame += 0.005*time;
 				if (CurrentFrame > 3) CurrentFrame -= 3;
 				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
 				break;
 			 }
 			case left: {//состояние идти влево 
-				dx = -speed;
+				dx = -speed; dy = 0;
 				CurrentFrame += 0.005*time;
 				if (CurrentFrame > 3) CurrentFrame -= 3;
 				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
 				break;
 			 }
 			case up: {//идти вверх 
-				dy = -speed;
+				dy = -speed; dx = 0;
 				CurrentFrame += 0.005*time;
 				if (CurrentFrame > 3) CurrentFrame -= 3;
 				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
 				break;
 			 }
 			case down: {//идти вниз 
-				dy = speed;
+				dy = speed; dx = 0;
 				CurrentFrame += 0.005*time;
 				if (CurrentFrame > 3) CurrentFrame -= 3;
 				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
