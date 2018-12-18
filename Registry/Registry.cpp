@@ -51,7 +51,7 @@ public:
 		state = stay;
 		if (name == "Player1") {
 			//Задаем спрайту один прямоугольник для вывода одного игрока. IntRect – для приведения типов 
-			sprite.setTextureRect(IntRect(0, 0, w, h));
+			sprite.setTextureRect(IntRect(40, 172, w, h));
 		}
 	}
 
@@ -85,30 +85,32 @@ public:
 			{
 			case right: {//состояние идти вправо 
 				dx = speed; dy = 0;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setScale(1, 1);
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			 }
 			case left: {//состояние идти влево 
 				dx = -speed; dy = 0;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setScale(-1, 1);
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			 }
 			case up: {//идти вверх 
 				dy = -speed; dx = 0;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
 				break;
 			 }
 			case down: {//идти вниз 
 				dy = speed; dx = 0;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
 				break;
 			 }
 			case stay: {//стоим 
@@ -153,34 +155,36 @@ public:
 			if (life) {
 				switch (direction)//делаются различные действия в зависимости от состояния 
 				{
-				case 0: {//состояние идти вправо 
-					dx = speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
-					break;
-				 }
-				case 1: {//состояние идти влево 
-					dx = -speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
-					break;
-				 }
-				case 2: {//идти вверх 
-					dy = -speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
-					break;
-				 }
-				case 3: {//идти вниз 
-					dy = speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
-					break;
-				 }
+					case 0: {//состояние идти вправо 
+						dx = speed; dy = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setScale(1, 1);
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+						break;
+					}
+					case 1: {//состояние идти влево 
+						dx = -speed; dy = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setScale(-1, 1);
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+						break;
+					}
+					case 2: {//идти вверх 
+						dy = -speed; dx = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
+						break;
+					}
+					case 3: {//идти вниз 
+						dy = speed; dx = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
+						break;
+					}
 				}
 
 				x += dx * time; //движение по “X” 
@@ -215,8 +219,8 @@ int main()
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
 
-	Player p(heroImage, 600, 300, 96, 96, "Player1");
-	Enemy psycho(EnemyImage, 150, 150, 96, 96, "Psycho");
+	Player p(heroImage, 600, 300, 40, 86, "Player1");
+	Enemy psycho(EnemyImage, 150, 150, 40, 86, "Psycho");
 
 	Clock clock;
 	Clock gameTimeClock;
