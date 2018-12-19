@@ -159,7 +159,7 @@ public:
 						dx = speed; dy = 0;
 						CurrentFrame += 0.0065*time;
 						if (CurrentFrame > 4) CurrentFrame -= 4;
-						sprite.setScale(1, 1);
+						sprite.setScale(1,1);
 						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 						break;
 					}
@@ -250,9 +250,11 @@ int main()
 		for (int i = 0; i < Height_Map; i++)
 			for (int j = 0; j < Width_Map; j++)
 			{
-				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 1-й квадратик 
-				 
-				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 3й квадратик 
+				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 1й квадратик 
+
+				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 2й квадратик 
+
+				if ((TileMap[i][j] == 'X')) s_map.setTextureRect(IntRect(96, 0, 32, 32));//если встретили X, то рисуем 4й квадратик (дверь)
 
 				s_map.setPosition(j * 32, i * 32);//раскладываем квадратики в карту. 
 
