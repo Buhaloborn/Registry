@@ -51,7 +51,7 @@ public:
 		state = stay;
 		if (name == "Player1") {
 			//Задаем спрайту один прямоугольник для вывода одного игрока. IntRect – для приведения типов 
-			sprite.setTextureRect(IntRect(0, 0, w, h));
+			sprite.setTextureRect(IntRect(40, 172, w, h));
 		}
 	}
 
@@ -84,31 +84,33 @@ public:
 			switch (state)//делаются различные действия в зависимости от состояния 
 			{
 			case right: {//состояние идти вправо 
-				dx = speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
+				dx = speed; dy = 0;
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setScale(1, 1);
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			 }
 			case left: {//состояние идти влево 
-				dx = -speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
+				dx = -speed; dy = 0;
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setScale(-1, 1);
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			 }
 			case up: {//идти вверх 
-				dy = -speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
+				dy = -speed; dx = 0;
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
 				break;
 			 }
 			case down: {//идти вниз 
-				dy = speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
+				dy = speed; dx = 0;
+				CurrentFrame += 0.0065*time;
+				if (CurrentFrame > 4) CurrentFrame -= 4;
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
 				break;
 			 }
 			case stay: {//стоим 
@@ -153,34 +155,36 @@ public:
 			if (life) {
 				switch (direction)//делаются различные действия в зависимости от состояния 
 				{
-				case 0: {//состояние идти вправо 
-					dx = speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
-					break;
-				 }
-				case 1: {//состояние идти влево 
-					dx = -speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
-					break;
-				 }
-				case 2: {//идти вверх 
-					dy = -speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
-					break;
-				 }
-				case 3: {//идти вниз 
-					dy = speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
-					break;
-				 }
+					case 0: {//состояние идти вправо 
+						dx = speed; dy = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setScale(1,1);
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+						break;
+					}
+					case 1: {//состояние идти влево 
+						dx = -speed; dy = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setScale(-1, 1);
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+						break;
+					}
+					case 2: {//идти вверх 
+						dy = -speed; dx = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
+						break;
+					}
+					case 3: {//идти вниз 
+						dy = speed; dx = 0;
+						CurrentFrame += 0.0065*time;
+						if (CurrentFrame > 4) CurrentFrame -= 4;
+						sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
+						break;
+					}
 				}
 
 				x += dx * time; //движение по “X” 
@@ -200,7 +204,7 @@ public:
 int main()
 { 
 	VideoMode desktop = VideoMode::getDesktopMode();
-	RenderWindow window(VideoMode(1280, 608, desktop.bitsPerPixel), "Registry");
+	RenderWindow window(VideoMode(1024, 576, desktop.bitsPerPixel), "Registry");
 
 	Image map_image;
 	map_image.loadFromFile("images/map.png");
@@ -215,8 +219,8 @@ int main()
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
 
-	Player p(heroImage, 600, 300, 96, 96, "Player1");
-	Enemy psycho(EnemyImage, 150, 150, 96, 96, "Psycho");
+	Player p(heroImage, 600, 300, 40, 86, "Player1");
+	Enemy psycho(EnemyImage, 150, 150, 40, 86, "Psycho");
 
 	Clock clock;
 	Clock gameTimeClock;
@@ -246,9 +250,11 @@ int main()
 		for (int i = 0; i < Height_Map; i++)
 			for (int j = 0; j < Width_Map; j++)
 			{
-				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(0, 0, 32, 32)); //если встретили пробел, то рисуем 1-й квадратик 
-				 
-				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(64, 0, 32, 32));//если встретили 0, то рисуем 3й квадратик 
+				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 1й квадратик 
+
+				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 2й квадратик 
+
+				if ((TileMap[i][j] == 'X')) s_map.setTextureRect(IntRect(96, 0, 32, 32));//если встретили X, то рисуем 4й квадратик (дверь)
 
 				s_map.setPosition(j * 32, i * 32);//раскладываем квадратики в карту. 
 
