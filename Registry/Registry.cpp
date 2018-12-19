@@ -204,7 +204,7 @@ public:
 int main()
 { 
 	VideoMode desktop = VideoMode::getDesktopMode();
-	RenderWindow window(VideoMode(1280, 608, desktop.bitsPerPixel), "Registry");
+	RenderWindow window(VideoMode(1024, 576, desktop.bitsPerPixel), "Registry");
 
 	Image map_image;
 	map_image.loadFromFile("images/map.png");
@@ -250,9 +250,9 @@ int main()
 		for (int i = 0; i < Height_Map; i++)
 			for (int j = 0; j < Width_Map; j++)
 			{
-				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(0, 0, 32, 32)); //если встретили пробел, то рисуем 1-й квадратик 
+				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 1-й квадратик 
 				 
-				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(64, 0, 32, 32));//если встретили 0, то рисуем 3й квадратик 
+				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 3й квадратик 
 
 				s_map.setPosition(j * 32, i * 32);//раскладываем квадратики в карту. 
 
