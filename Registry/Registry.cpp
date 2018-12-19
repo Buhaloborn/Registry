@@ -1,13 +1,8 @@
-﻿#include <SFML/Graphics.hpp> 
 #include <sstream>
 #include <iostream>
 #include "map.h"
 #include "Player.h"
 #include "Enemy.h"
-
-using namespace sf;
-using namespace std;
-
 
 int main()
 { 
