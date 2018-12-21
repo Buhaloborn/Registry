@@ -1,5 +1,5 @@
 #include "Player.h"
-using namespace std;
+//using namespace std;
 
 ////////////////////////////Игрок//////////////////////// 
 	void Player::control() 

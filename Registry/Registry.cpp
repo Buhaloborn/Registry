@@ -3,6 +3,7 @@
 #include "map.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "bullet.h"
 
 int main()
 { 
@@ -18,6 +19,10 @@ int main()
 	
 	Image heroImage;
 	heroImage.loadFromFile("images/hero.png");
+
+	Image BulletImage;
+	BulletImage.loadFromFile("images/bullet.png");
+
 
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
