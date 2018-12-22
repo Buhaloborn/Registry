@@ -2,9 +2,8 @@
 #include <iostream>
 #include "Player.h"
 #include "Enemy.h"
+#include "Place.h"
 #include "map.h"
-
-
 int main()
 { 
 	VideoMode desktop = VideoMode::getDesktopMode();
@@ -23,18 +22,26 @@ int main()
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
 
+
+	Image WindowImage;
+	WindowImage.loadFromFile("images/window.png");
+
 	Player p(heroImage, 600, 300, 40, 86, "Player");
 	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
+	Place w1(WindowImage, 50, 50, 60, 75), w2(WindowImage, 500, 500, 60, 75);
+	
 
-	Clock clock;
+
+	Clock clock, test;
 	Clock gameTimeClock;
-	int gameTime = 0;
+	float gameTime = 0; int testTime = gameTime;
 	// Основной (бесконечный) цикл 
 	while (window.isOpen())
 	{
-		float time = clock.getElapsedTime().asMicroseconds();
+		int time = clock.getElapsedTime().asMicroseconds();
 
-		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds();
+		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
+		testTime = test.getElapsedTime().asMicroseconds();
 
 		clock.restart();
 		time = time / 800;
@@ -47,8 +54,18 @@ int main()
 
 		p.update(time);
 		psycho.update(time);
+		w1.update(time);
+		
 
 		window.clear(); 
+
+		Font font;
+		font.loadFromFile("GothaProMed.otf");
+		Text text("", font, 20);//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
+								// шрифта(в пикселях)
+		//покрасили текст в красный.
+								  //если убрать эту строку, то по умолчанию текст белый
+
 
 		//////////Карта///////////
 		for (int i = 0; i < Height_Map; i++)
@@ -65,9 +82,17 @@ int main()
 				window.draw(s_map);//рисуем квадратики на экран 
 			}
 
+		window.draw(w1.sprite);
 		window.draw(p.sprite);
 		window.draw(psycho.sprite);
 
+		ostringstream playerScoreString; // объявили переменную
+		playerScoreString << p.health; //занесли в нее число очков, то есть формируем строку
+		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
+																	 //сформированную выше строку методом .str()
+		text.setPosition(500, 500);//задаем позицию текста
+		window.draw(text);//рисуем этот текст
+		
 		window.display();  
 	}
 
