@@ -40,7 +40,6 @@ using namespace std;
 				dx = speed; dy = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setScale(1, 1);
 				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			}
@@ -48,7 +47,6 @@ using namespace std;
 				dx = -speed; dy = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setScale(-1, 1);
 				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			}
