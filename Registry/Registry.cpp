@@ -1,8 +1,9 @@
 #include <sstream>
 #include <iostream>
-#include "map.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "map.h"
+
 
 int main()
 { 
@@ -22,8 +23,8 @@ int main()
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
 
-	Player p(heroImage, 600, 300, 40, 86, "Player1");
-	Enemy psycho(EnemyImage, 150, 150, 40, 86, "Psycho");
+	Player p(heroImage, 600, 300, 40, 86, "Player");
+	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
 
 	Clock clock;
 	Clock gameTimeClock;

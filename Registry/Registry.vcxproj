@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Registry.cpp" />
   </ItemGroup>

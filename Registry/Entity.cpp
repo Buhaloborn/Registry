@@ -11,7 +11,6 @@ using namespace sf;
 		dx = 0; dy = 0;
 		speed = 0;
 		CurrentFrame = 0;
-		health = 100;
 		life = true; //сущность жива
 		texture.loadFromImage(image); //заносим изображение в текстуру 
 		sprite.setTexture(texture); //заливаем спрайт текстурой 
