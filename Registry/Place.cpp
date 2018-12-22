@@ -24,3 +24,8 @@ void Place::update(float time)
 	else
 		isOpen = false; //окно закрыто
 }
+
+FloatRect Place::getRect() {//метод получения прямоугольника. его коорд, размеры (шир,высот). 
+	FloatRect FR(x, y, w, h);
+	return FR;
+}

@@ -1,13 +1,12 @@
-﻿#include <sstream>
+#include <sstream>
 #include <iostream>
-#include "map.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Place.h"
-
+#include "map.h"
+#include <list>
 int main()
 { 
-	setlocale(LC_ALL, "Rus");
 	VideoMode desktop = VideoMode::getDesktopMode();
 	RenderWindow window(VideoMode(1024, 576, desktop.bitsPerPixel), "Registry");
 
@@ -24,12 +23,26 @@ int main()
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
 
+
 	Image WindowImage;
 	WindowImage.loadFromFile("images/window.png");
 
-	Player p(heroImage, 600, 300, 40, 86, "Player1");
-	Enemy psycho(EnemyImage, 150, 150, 40, 86, "Psycho");
+	Player p(heroImage, 600, 300, 40, 86, "Player");
+	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
 	Place w1(WindowImage, 50, 50, 60, 75), w2(WindowImage, 500, 500, 60, 75);
+	list <Place*> windows;
+	list <Place*>::iterator it;
+
+	const int W_COUNT = 6; //максимальное количество врагов в игре
+	int wCount = 0; //текущее количество врагов в игре
+
+	for (int i = 0;i < W_COUNT;i++)
+	{
+		float xr = 50 + 172 * i;
+		float yr = 50;
+		windows.push_back(new Place(WindowImage, xr, yr, 60, 75));
+		wCount++;
+	}
 
 	Clock clock, test;
 	Clock gameTimeClock;
@@ -53,17 +66,25 @@ int main()
 
 		p.update(time);
 		psycho.update(time);
-		w1.update(time);
+		for (it = windows.begin();it != windows.end();it++)
+		{
+			(*it)->update(time);
+		}
+		p.health -= 0.1; //со временем очки сгорают, если счёт дойдет до нуля, игра окончена
 		
-
+		for (it = windows.begin();it != windows.end();it++)
+		if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen) 
+		{ //проверка пересечения игрока с окном
+			p.health += 80; //начисление очков, если окно открыто
+			(*it)->CurrentFrame = 1; //закрытие окна после получения очков
+		}
+		
 		window.clear(); 
 
 		Font font;
 		font.loadFromFile("GothaProMed.otf");
 		Text text("", font, 20);//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
-								// шрифта(в пикселях)
-		//покрасили текст в красный.
-								  //если убрать эту строку, то по умолчанию текст белый
+								//шрифта(в пикселях)
 
 
 		//////////Карта///////////
@@ -81,19 +102,21 @@ int main()
 				window.draw(s_map);//рисуем квадратики на экран 
 			}
 
-		window.draw(w1.sprite);
+		for (it = windows.begin();it != windows.end();it++)
+		{
+			window.draw((*it)->sprite);
+		}
 		
+		window.draw(p.sprite);
+		window.draw(psycho.sprite);
+
 		ostringstream playerScoreString; // объявили переменную
-		playerScoreString << p.health; //занесли в нее число очков, то есть формируем строку
-		text.setString(L"Очки: " + playerScoreString.str()); //задаем строку тексту и вызываем
+		playerScoreString << int(p.health); //занесли в нее число очков, то есть формируем строку
+		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
 																	 //сформированную выше строку методом .str()
 		text.setPosition(500, 500);//задаем позицию текста
 		window.draw(text);//рисуем этот текст
 		
-		window.draw(p.sprite);
-		window.draw(psycho.sprite);
-		
-
 		window.display();  
 	}
 
