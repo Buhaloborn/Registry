@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Place.h"
 #include "map.h"
+#include <list>
 int main()
 { 
 	VideoMode desktop = VideoMode::getDesktopMode();
@@ -29,19 +30,31 @@ int main()
 	Player p(heroImage, 600, 300, 40, 86, "Player");
 	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
 	Place w1(WindowImage, 50, 50, 60, 75), w2(WindowImage, 500, 500, 60, 75);
-	
 
+	list <Place*> windows;
+	list <Place*>::iterator it;
 
-	Clock clock, test;
+	const int W_COUNT = 6; //максимальное количество окон в игре
+	int wCount = 0; //текущее количество окон в игре
+
+	for (int i = 0;i < W_COUNT;i++)
+	{
+		float xr = 50 + 172 * i;
+		float yr = 50; //задаём позицию окон
+		windows.push_back(new Place(WindowImage, xr, yr, 60, 75)); //вносим их в список
+		wCount++;
+	}
+
+	Clock clock;
 	Clock gameTimeClock;
-	float gameTime = 0; int testTime = gameTime;
+	float gameTime = 0; 
 	// Основной (бесконечный) цикл 
 	while (window.isOpen())
 	{
 		int time = clock.getElapsedTime().asMicroseconds();
 
 		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
-		testTime = test.getElapsedTime().asMicroseconds();
+		
 
 		clock.restart();
 		time = time / 800;
@@ -54,17 +67,26 @@ int main()
 
 		p.update(time);
 		psycho.update(time);
-		w1.update(time);
-		
+		for (it = windows.begin();it != windows.end();it++)
+		{
+			(*it)->update(time); //применяем метод update(time) класса Place для объектов из списка
+		}
+		p.health -= 0.1; //со временем очки сгорают, если счёт дойдет до нуля, игра окончена
 
+		////////////////////////////////пересечение с окном//////////////////////////////////
+		for (it = windows.begin();it != windows.end();it++)
+		if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen) 
+		{ //проверка пересечения игрока с окном
+			p.health += 80; //начисление очков, если окно открыто
+			(*it)->CurrentFrame = 1; //закрытие окна после получения очков
+		}
+		///////////////////////////////////////////////////////////////////////////////////
 		window.clear(); 
 
 		Font font;
 		font.loadFromFile("GothaProMed.otf");
 		Text text("", font, 20);//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
-								// шрифта(в пикселях)
-		//покрасили текст в красный.
-								  //если убрать эту строку, то по умолчанию текст белый
+								//шрифта(в пикселях)
 
 
 		//////////Карта///////////
@@ -82,12 +104,17 @@ int main()
 				window.draw(s_map);//рисуем квадратики на экран 
 			}
 
-		window.draw(w1.sprite);
+
+		for (it = windows.begin();it != windows.end();it++)
+		{
+			window.draw((*it)->sprite);
+		}
+		
 		window.draw(p.sprite);
 		window.draw(psycho.sprite);
 
 		ostringstream playerScoreString; // объявили переменную
-		playerScoreString << p.health; //занесли в нее число очков, то есть формируем строку
+		playerScoreString << int(p.health); //занесли в нее число очков, то есть формируем строку
 		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
 																	 //сформированную выше строку методом .str()
 		text.setPosition(500, 500);//задаем позицию текста

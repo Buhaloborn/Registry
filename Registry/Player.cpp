@@ -81,7 +81,7 @@ using namespace std;
 
 			sprite.setPosition(x, y); //спрайт в позиции (x, y). 
 
-			if (PlayerScore <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
+			if (health <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
 		}
 	}
 
