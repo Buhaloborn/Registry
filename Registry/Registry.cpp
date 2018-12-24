@@ -52,7 +52,7 @@ int main()
 
 		p.update(time);
 		psycho.update(time);
-		bullet.update(time);
+		
 		window.clear(); 
 
 		//////////Карта///////////

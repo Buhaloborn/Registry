@@ -6,7 +6,7 @@ public:
 	int direction;//направление пули
 				  //всЄ так же, только вз€ли в конце состо€ние игрока (int dir) 
 				  //дл€ задани€ направлени€ полЄта пули
-	Bullet(Image &image, float X, float Y, int W, int H, std::string  Name/*,int dir*/) :Entity(image, X, Y, W, H, Name) {
+	Bullet(Image &image, float X, float Y, int W, int H, std::string  Name) :Entity(image, X, Y, W, H, Name) {
 		if (name == "Bullet") {
 			x = X;
 			y = Y;

@@ -1,5 +1,5 @@
 #include "Bullet.h"
-#include "Header.h"
+
 
 
 void Bullet::update(float time)
@@ -25,12 +25,7 @@ void Bullet::update(float time)
 			if (y >= 576) y = 556;
 
 
-			for (int i = y / 32; i < (y + h) / 32; i++)//проходимся по элементам карты
-				for (int j = x / 32; j < (x + w) / 32; j++)
-				{
-					if (TileMap[i][j] == '0')//если элемент наш тайлик земли, то
-						life = false;// то пуля умирает
-				}
+			
 
 			sprite.setPosition(x + w / 2, y + h / 2);//задается позицию пули
 		}
