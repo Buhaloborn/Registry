@@ -6,12 +6,12 @@ using namespace sf;
 	Entity::Entity(Image &image, float X, float Y, int W, int H, string Name) {
 		x = X; y = Y; //координата появления спрайта 
 		w = W; h = H;
+		health = 100;
 		name = Name;
 		moveTimer = 0;
 		dx = 0; dy = 0;
 		speed = 0;
 		CurrentFrame = 0;
-		health = 100;
 		life = true; //сущность жива
 		texture.loadFromImage(image); //заносим изображение в текстуру 
 		sprite.setTexture(texture); //заливаем спрайт текстурой 
