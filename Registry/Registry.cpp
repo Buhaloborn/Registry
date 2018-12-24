@@ -44,16 +44,16 @@ int main()
 		wCount++;
 	}
 
-	Clock clock, test;
+	Clock clock;
 	Clock gameTimeClock;
-	float gameTime = 0; int testTime = gameTime;
+	float gameTime = 0; 
 	// Основной (бесконечный) цикл 
 	while (window.isOpen())
 	{
 		int time = clock.getElapsedTime().asMicroseconds();
 
 		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
-		testTime = test.getElapsedTime().asMicroseconds();
+		
 
 		clock.restart();
 		time = time / 800;
@@ -71,14 +71,15 @@ int main()
 			(*it)->update(time);
 		}
 		p.health -= 0.1; //со временем очки сгорают, если счёт дойдет до нуля, игра окончена
-		
+
+		////////////////////////////////пересечение с окном//////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
 		if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen) 
 		{ //проверка пересечения игрока с окном
 			p.health += 80; //начисление очков, если окно открыто
 			(*it)->CurrentFrame = 1; //закрытие окна после получения очков
 		}
-		
+		///////////////////////////////////////////////////////////////////////////////////
 		window.clear(); 
 
 		Font font;
