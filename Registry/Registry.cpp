@@ -1,9 +1,11 @@
 #include <sstream>
 #include <iostream>
+#include <list>
 #include "Player.h"
 #include "Enemy.h"
 #include "Place.h"
 #include "map.h"
+#include "bullet.h"
 
 int main()
 { 
@@ -34,6 +36,9 @@ int main()
 	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
 	Place w1(WindowImage, 50, 50, 60, 75), w2(WindowImage, 500, 500, 60, 75);
 	
+	
+	std::list<Entity*>  Bullets; //список пуль
+	std::list<Entity*>::iterator it;
 
 
 	Clock clock, test;
@@ -54,12 +59,34 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
+
+			if (event.type == rand())
+			{
+				if (event.key.code == rand())
+				{
+					//добавляем в список Bullets пулю
+					Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state));
+				}
+			}
+
 		}
 
 		p.update(time);
 		psycho.update(time);
 		w1.update(time);
+
+		for (it = Bullets.begin(); it != Bullets.end(); it++)
+		{
+			(*it)->update(time); //запускаем метод update()
+		}
+
 		
+		for (it = Bullets.begin(); it != Bullets.end(); )//говорим что проходимся от начала до конца
+		{// если этот объект мертв, то удаляем его
+			if ((*it)->life == false) { it = Bullets.erase(it); }
+			else
+				it++; //и идем курсором (итератором) к след объекту.
+		}
 
 
 		window.clear(); 
@@ -90,6 +117,13 @@ int main()
 		window.draw(w1.sprite);
 		window.draw(p.sprite);
 		window.draw(psycho.sprite);
+
+		
+		for (it = Bullets.begin(); it != Bullets.end(); it++)
+		{
+			window.draw((*it)->sprite); //рисуем enemies объекты
+		}
+
 
 		ostringstream playerScoreString; // объявили переменную
 		playerScoreString << p.health; //занесли в нее число очков, то есть формируем строку
