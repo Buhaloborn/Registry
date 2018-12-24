@@ -29,6 +29,7 @@ int main()
 
 	Player p(heroImage, 600, 300, 40, 86, "Player1");
 	Enemy psycho(EnemyImage, 150, 150, 40, 86, "Psycho");
+	Bullet bullet(BulletImage, 150, 150, 40, 86, "Bullet");
 
 	Clock clock;
 	Clock gameTimeClock;
@@ -51,7 +52,7 @@ int main()
 
 		p.update(time);
 		psycho.update(time);
-
+		bullet.update(time);
 		window.clear(); 
 
 		//////////Карта///////////
