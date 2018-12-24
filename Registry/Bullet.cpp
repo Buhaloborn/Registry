@@ -31,7 +31,6 @@ void Bullet::update(float time)
 					if (TileMap[i][j] == '0')//если элемент наш тайлик земли, то
 						life = false;// то пуля умирает
 				}
-
 			sprite.setPosition(x + w / 2, y + h / 2);//задается позицию пули
 		}
 	}

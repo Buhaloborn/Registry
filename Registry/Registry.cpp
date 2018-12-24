@@ -60,12 +60,13 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
 
-			if (event.type == rand())
+			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == rand())
+				if (event.key.code == sf::Keyboard::P)
+
 				{
 					//добавляем в список Bullets пулю
-					Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state));
+					Bullets.push_back(new Bullet(BulletImage, psycho.x, psycho.y, 16, 16, "Bullet", psycho.direction));
 				}
 			}
 
@@ -121,8 +122,10 @@ int main()
 		
 		for (it = Bullets.begin(); it != Bullets.end(); it++)
 		{
-			window.draw((*it)->sprite); //рисуем enemies объекты
+			if ((*it)->life) //если пули живы
+				window.draw((*it)->sprite); //рисуем объекты
 		}
+
 
 
 		ostringstream playerScoreString; // объявили переменную

@@ -13,6 +13,7 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновен
 				if (Dy > 0) {
 					y = i * 32 - h;  dy = -0.1;
 					direction = rand() % (4); //Направление движения врага
+					
 				}//по Y 
 				if (Dy < 0) {
 					y = i * 32 + 32; dy = 0.1;
@@ -71,7 +72,7 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновен
 				checkCollisionWithMap(dx, 0);//
 				y += dy * time; //движение по “Y” 
 				checkCollisionWithMap(0, dy);//
-
+				
 				sprite.setPosition(x, y); //спрайт в позиции (x, y). 
 
 				//if (PlayerScore <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
