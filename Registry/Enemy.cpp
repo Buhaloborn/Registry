@@ -74,8 +74,6 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновен
 				checkCollisionWithMap(0, dy);//
 				
 				sprite.setPosition(x, y); //спрайт в позиции (x, y). 
-
-				//if (PlayerScore <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
 			}
 		}
 	}
