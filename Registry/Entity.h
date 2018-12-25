@@ -10,7 +10,7 @@ public:
 	enum { left, right, up, down, stay } state;// тип перечисления - состояние объекта 
 	float dx, dy, x, y, speed, moveTimer;
 	int w, h;
-	int health;
+	float health;
 	bool life; //жизнь, логическая 
 	Texture texture;//сфмл текстура 
 	Sprite sprite;//сфмл спрайт 
