@@ -1,10 +1,13 @@
 #include <sstream>
 #include <iostream>
+#include <list>
 #include "Player.h"
 #include "Enemy.h"
 #include "Place.h"
 #include "map.h"
+#include "bullet.h"
 #include <list>
+
 int main()
 { 
 	VideoMode desktop = VideoMode::getDesktopMode();
@@ -20,9 +23,12 @@ int main()
 	Image heroImage;
 	heroImage.loadFromFile("images/hero.png");
 
+	Image BulletImage;
+	BulletImage.loadFromFile("images/bullet.png");
+
+
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
-
 
 	Image WindowImage;
 	WindowImage.loadFromFile("images/window.png");
@@ -30,7 +36,10 @@ int main()
 	Player p(heroImage, 600, 300, 40, 86, "Player");
 	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
 	Place w1(WindowImage, 50, 50, 60, 75), w2(WindowImage, 500, 500, 60, 75);
-
+	
+	
+	list<Entity*>  Bullets; //список пуль
+	list<Entity*>::iterator itr;
 	list <Place*> windows;
 	list <Place*>::iterator it;
 
@@ -45,17 +54,16 @@ int main()
 		wCount++;
 	}
 
-	Clock clock;
+	Clock clock, test;
 	Clock gameTimeClock;
-	float gameTime = 0; 
+
+	float gameTime = 0; float createBullet = 0;
 	// Основной (бесконечный) цикл 
 	while (window.isOpen())
 	{
 		int time = clock.getElapsedTime().asMicroseconds();
-
-		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
 		
-
+		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
 		clock.restart();
 		time = time / 800;
 		Event event; 
@@ -64,9 +72,37 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
 		}
-
+		/////////////Рандомные выстрелы/////////////////////////////////////////
+		
+		int testTime = test.getElapsedTime().asSeconds();
+		cout << testTime << endl;
+		if (createBullet < 2500) {
+			createBullet += testTime;
+		}
+			else
+			{
+				Bullets.push_back(new Bullet(BulletImage, psycho.x, psycho.y, 16, 16, "Bullet", psycho.direction)); //добавляем в список Bullets пулю
+		
+				createBullet = 0;
+				test.restart();
+			}
+		////////////////////////////////////////////////////////////////
 		p.update(time);
 		psycho.update(time);
+
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+		{
+			(*itr)->update(time); //запускаем метод update()
+		}
+
+		
+		for (itr = Bullets.begin(); itr != Bullets.end(); )//говорим что проходимся от начала до конца
+		{// если этот объект мертв, то удаляем его
+			if ((*itr)->life == false) { itr = Bullets.erase(itr); }
+			else
+				itr++; //и идем курсором (итератором) к след объекту.
+		}
+///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
 		{
 			(*it)->update(time); //применяем метод update(time) класса Place для объектов из списка
@@ -112,6 +148,15 @@ int main()
 		
 		window.draw(p.sprite);
 		window.draw(psycho.sprite);
+
+		
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+		{
+			if ((*itr)->life) //если пули живы
+				window.draw((*itr)->sprite); //рисуем объекты
+		}
+
+
 
 		ostringstream playerScoreString; // объявили переменную
 		playerScoreString << int(p.health); //занесли в нее число очков, то есть формируем строку
