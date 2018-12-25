@@ -107,13 +107,15 @@ int main()
 		{
 			(*it)->update(time); //применяем метод update(time) класса Place для объектов из списка
 		}
-		p.health -= 0.1; //со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		
+		p.PlayerScore -= 0.1;
+		cout << p.PlayerScore << endl;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
 
 		////////////////////////////////пересечение с окном//////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
 		if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen) 
 		{ //проверка пересечения игрока с окном
-			p.health += 80; //начисление очков, если окно открыто
+			p.PlayerScore += 80; //начисление очков, если окно открыто
 			(*it)->CurrentFrame = 1; //закрытие окна после получения очков
 		}
 		///////////////////////////////////////////////////////////////////////////////////
@@ -157,9 +159,13 @@ int main()
 		}
 
 
+		if (p.PlayerScore <= 0) {
+			p.life = false;
+			psycho.life = false;
+		}
 
 		ostringstream playerScoreString; // объявили переменную
-		playerScoreString << int(p.health); //занесли в нее число очков, то есть формируем строку
+		playerScoreString << int(p.PlayerScore); //занесли в нее число очков, то есть формируем строку
 		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
 																	 //сформированную выше строку методом .str()
 		text.setPosition(500, 500);//задаем позицию текста

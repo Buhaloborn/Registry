@@ -1,7 +1,6 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 #include "Entity.h"
-
-
 
 ////////////////////////////Игрок//////////////////////// 
 class Player : public Entity {
@@ -22,3 +21,4 @@ public:
 	void control();
 	void update(float time); //метод "оживления обновления" объекта класса. 
 };
+#endif
