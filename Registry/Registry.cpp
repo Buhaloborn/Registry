@@ -43,15 +43,13 @@ int main()
 
 	Clock clock, test;
 	Clock gameTimeClock;
-	float gameTime = 0; int testTime = gameTime;
+	float gameTime = 0; float createBullet = 0;
 	// Основной (бесконечный) цикл 
 	while (window.isOpen())
 	{
 		int time = clock.getElapsedTime().asMicroseconds();
-
+		
 		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
-		testTime = test.getElapsedTime().asMicroseconds();
-
 		clock.restart();
 		time = time / 800;
 		Event event; 
@@ -59,19 +57,22 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
-
-			if (event.type == sf::Event::KeyPressed)
-			{
-				if (event.key.code == sf::Keyboard::P)
-
-				{
-					//добавляем в список Bullets пулю
-					Bullets.push_back(new Bullet(BulletImage, psycho.x, psycho.y, 16, 16, "Bullet", psycho.direction));
-				}
-			}
-
 		}
-
+		/////////////Рандомные выстрелы/////////////////////////////////////////
+		
+		int testTime = test.getElapsedTime().asSeconds();
+		cout << testTime << endl;
+		if (createBullet < 2500) {
+			createBullet += testTime;
+		}
+			else
+			{
+				Bullets.push_back(new Bullet(BulletImage, psycho.x, psycho.y, 16, 16, "Bullet", psycho.direction)); //добавляем в список Bullets пулю
+		
+				createBullet = 0;
+				test.restart();
+			}
+		////////////////////////////////////////////////////////////////
 		p.update(time);
 		psycho.update(time);
 		w1.update(time);

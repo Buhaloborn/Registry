@@ -11,7 +11,7 @@ public:
 			x = X;
 			y = Y;
 			direction = dir;
-			speed = 0.8;
+			speed = 0.4;
 			w = h = 16;
 			life = true;
 		}
