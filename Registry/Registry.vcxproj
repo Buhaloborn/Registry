@@ -174,7 +174,6 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="Header.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Place.h" />
