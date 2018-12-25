@@ -107,32 +107,26 @@ int main()
 		{
 			(*it)->update(time); //применяем метод update(time) класса Place для объектов из списка
 		}
-<<<<<<< HEAD
-		p.PlayerScore -= 0.1; //со временем очки сгорают, если счёт дойдет до нуля, игра окончена
-=======
-		
+
 		p.PlayerScore -= 0.1;
 		cout << p.PlayerScore << endl;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
->>>>>>> develop
 
 		////////////////////////////////пересечение с окном//////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
 		if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen) 
-<<<<<<< HEAD
-		{																//проверка пересечения игрока с окном
-			p.PlayerScore += 80;												 //начисление очков, если окно открыто
-=======
+
 		{ //проверка пересечения игрока с окном
 			p.PlayerScore += 80; //начисление очков, если окно открыто
->>>>>>> develop
 			(*it)->CurrentFrame = 1; //закрытие окна после получения очков
 		}
 		//////////////////////////////////Проверка пересечения ИГрока с тапками /////////////////////////////////////////////////
+		
 		if (p.life == true) {//если игрок жив
-			for (itr = Bullets.begin(); itr != Bullets.end(); itr++) {//бежим по списку врагов
-				if ((p.getRect().intersects((*itr)->getRect())) && ((*itr)->name == "Bullet"))
+			for (itr = Bullets.begin(); itr != Bullets.end(); itr++) {						//бежим по списку врагов
+				if ((*itr)->getRect().intersects (p.getRect()) && ((*itr)->name == "Bullet"))
 				{
-					p.health -=50 ;
+					p.PlayerScore -= 50 ;
+					(*itr)->life = false;
 				}
 			}
 		}
@@ -184,11 +178,8 @@ int main()
 		}
 
 		ostringstream playerScoreString; // объявили переменную
-<<<<<<< HEAD
-		playerScoreString << p.PlayerScore; //занесли в нее число очков, то есть формируем строку
-=======
-		playerScoreString << int(p.PlayerScore); //занесли в нее число очков, то есть формируем строку
->>>>>>> develop
+
+		playerScoreString << int (p.PlayerScore); //занесли в нее число очков, то есть формируем строку
 		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
 																	 //сформированную выше строку методом .str()
 		text.setPosition(500, 500);//задаем позицию текста
