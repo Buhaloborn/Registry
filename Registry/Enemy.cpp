@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "map.h"
+#include <iostream>
 using namespace std;
+using namespace sf;
 
 ////////////////////////////ѕсих//////////////////////// 
 void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ци€ проверки столкновений с картой
@@ -12,21 +14,20 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ци€ проверки столкновен
 			{
 				if (Dy > 0) {
 					y = i * 32 - h;  dy = -0.1;
-					direction = rand() % (4); //Ќаправление движени€ врага
-					
+					direction = 2; //Ќаправление движени€ врага
 				}//по Y 
 				if (Dy < 0) {
 					y = i * 32 + 32; dy = 0.1;
-					direction = rand() % (4);//Ќаправление движени€ врага 
+					direction = 3;//Ќаправление движени€ врага 
 				}//столкновение с верхними кра€ми 
 				if (Dx > 0) {
 					x = j * 32 - w; dx = -0.1;
-					direction = rand() % (4);//Ќаправление движени€ врага 
+					direction = 1;//Ќаправление движени€ врага 
 				}//с правым краем карты
 				if (Dx < 0) {
 					x = j * 32 + 32; dx = 0.1;
-					direction = rand() % (4); //Ќаправление движени€ врага
-				}// с левым краем карты
+					direction = 0; // с левым краем карты
+				}
 			}
 		}
 }

@@ -6,7 +6,6 @@
 #include "Place.h"
 #include "map.h"
 #include "bullet.h"
-#include <list>
 
 int main()
 { 
@@ -35,13 +34,29 @@ int main()
 
 	Player p(heroImage, 600, 300, 40, 86, "Player");
 	Enemy psycho(EnemyImage, 500, 400, 40, 86, "Psycho");
-	Place w1(WindowImage, 50, 50, 60, 75), w2(WindowImage, 500, 500, 60, 75);
+
 	
-	
+	/*list<Enemy*> Enemies;
+	list<Enemy*>::iterator iter;*/
 	list<Entity*>  Bullets; //список пуль
 	list<Entity*>::iterator itr;
 	list <Place*> windows;
 	list <Place*>::iterator it;
+
+	/*const int ENEMY_COUNT = 5;	//максимальное количество врагов в игре
+	int enemiesCount = 0;	//текущее количество врагов в игре
+
+	//Заполняем список объектами врагами
+	for (int i = 0; i < ENEMY_COUNT; i++)
+	{
+		float xr = 150 + rand() % 500; // случайная координата врага на поле игры по оси “x”
+		float yr = 150 + rand() % 350; // случайная координата врага на поле игры по оси “y”
+		//создаем врагов и помещаем в список
+		Enemies.push_back(new Enemy(EnemyImage, xr, yr, 40, 86, "Psycho"));
+	 enemiesCount += 1; //увеличили счётчик врагов
+	}*/
+
+
 
 	const int W_COUNT = 6; //максимальное количество окон в игре
 	int wCount = 0; //текущее количество окон в игре
@@ -57,7 +72,11 @@ int main()
 	Clock clock, test;
 	Clock gameTimeClock;
 
-	float gameTime = 0; float createBullet = 0;
+	float switchdir = 0;
+	Clock swdir;
+
+	float gameTime = 0; 
+	float createBullet = 0;
 	// Основной (бесконечный) цикл 
 	while (window.isOpen())
 	{
@@ -72,6 +91,22 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
 		}
+
+
+		/////////////////Смена направления///////////
+		int swTime = swdir.getElapsedTime().asSeconds();
+		cout << "     " << swTime << endl;
+		if (switchdir < 20) {
+			switchdir += swTime;
+		}
+		else
+		{
+			psycho.direction = rand() % 3;
+			switchdir = 0;
+			swdir.restart();
+		}
+
+
 		/////////////Рандомные выстрелы/////////////////////////////////////////
 		
 		int testTime = test.getElapsedTime().asSeconds();
@@ -80,7 +115,7 @@ int main()
 			createBullet += testTime;
 		}
 			else
-			{
+			{  
 				Bullets.push_back(new Bullet(BulletImage, psycho.x, psycho.y, 16, 16, "Bullet", psycho.direction)); //добавляем в список Bullets пулю
 		
 				createBullet = 0;
@@ -89,6 +124,19 @@ int main()
 		////////////////////////////////////////////////////////////////
 		p.update(time);
 		psycho.update(time);
+
+		/*//оживляем врагов
+		for (iter = Enemies.begin(); iter != Enemies.end(); iter++)
+		{
+			(*iter)->update(time); //запускаем метод update()
+		}
+
+		//рисуем врагов
+		for (iter = Enemies.begin(); iter != Enemies.end(); iter++)
+		{
+			window.draw((*iter)->sprite); //рисуем enemies объекты
+		}*/
+
 
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 		{
@@ -108,8 +156,7 @@ int main()
 			(*it)->update(time); //применяем метод update(time) класса Place для объектов из списка
 		}
 		
-		p.PlayerScore -= 0.1;
-		cout << p.PlayerScore << endl;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		p.PlayerScore -= 0.1;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
 
 		////////////////////////////////пересечение с окном//////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
@@ -150,6 +197,7 @@ int main()
 		
 		window.draw(p.sprite);
 		window.draw(psycho.sprite);
+
 
 		
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
