@@ -70,9 +70,7 @@ int main()
 	Clock clock, test;
 	Clock gameTimeClock;
 
-
-	float switchdir = 0;
-	Clock swdir;
+	
 
 	float gameTime = 0; 
 	float createBullet = 0;
@@ -93,26 +91,25 @@ int main()
 		}
 
 		/////////////////////////////////////////Прорисовка выстрелов////////////////////////////////////////////////////////////
-	/*
+	
 
 
 
-		/////////////////Смена направления///////////
-		int swTime = swdir.getElapsedTime().asSeconds();
-		cout << "     " << swTime << endl;
-		if (switchdir < 20) {
-			switchdir += swTime;
-		}
-		else
+		/////////////////Смена направления///////////		
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
-			psycho.direction = rand() % 3;
-			switchdir = 0;
-			swdir.restart();
+			float switchdir;
+			switchdir = rand() % 50;	     
+			 if (switchdir > 48) 
+			{
+				(*ite)->direction = rand() % 3;
+			}
 		}
 
 
-		/////////////Рандомные выстрелы/////////////////////////////////////////
-		*/
+/////////////Рандомные выстрелы/////////////////////////////////////////
+		
+
 		int testTime = test.getElapsedTime().asSeconds();
 	//	cout << testTime <<"       " << createBullet << endl;
 		if (createBullet < 500) {
@@ -121,19 +118,21 @@ int main()
 
 		else
 		{
-			for (ite = Enemies.begin(); ite != Enemies.end(); ite++) 
+			for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 			{
 
-				Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand()%(3))); //добавляем в список Bullets пулю
+				Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand() % (3))); //добавляем в список Bullets пулю
 
 			}
 			createBullet = 0;
 			test.restart();
 		}
-								
-		p.update(time);	//Player download
-		
-		
+		///////////////////////////////////Player download/////////////////////////////////////
+		p.update(time);
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////Enemy update/////////////////////////////////////////	
+
 
 		//оживляем врагов
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
@@ -147,7 +146,7 @@ int main()
 			window.draw((*ite)->sprite); //рисуем enemies объекты
 		}
 
-
+		/////////////////////////////////////////////Загрузка пули/////////////////////////////
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 
 		{
@@ -162,7 +161,7 @@ int main()
 		}
 
 		
-		p.PlayerScore -= 0.1;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		p.PlayerScore -= 0.02;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
 
 
 		////////////////////////////////пересечение с окном//////////////////////////////////

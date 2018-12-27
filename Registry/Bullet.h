@@ -10,7 +10,7 @@ public:
 			x = X;
 			y = Y;
 			direction = dir;
-			speed = 0.1;
+			speed = 0.3;
 			w = h = 16;
 			life = true;
 		}
