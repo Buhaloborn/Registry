@@ -98,9 +98,9 @@ int main()
 		/////////////////Смена направления///////////		
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
-			float switchdir = 0;
-			switchdir = rand() % 25;	     
-			 if (switchdir > 23) 
+			float switchdir;
+			switchdir = rand() % 50;	     
+			 if (switchdir > 48) 
 			{
 				(*ite)->direction = rand() % 3;
 			}
@@ -171,7 +171,7 @@ int main()
 		}
 
 		
-		p.PlayerScore -= 0.1;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		p.PlayerScore -= 0.02;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
 
 
 		////////////////////////////////пересечение с окном//////////////////////////////////
