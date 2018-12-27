@@ -6,7 +6,6 @@
 #include "Place.h"
 #include "map.h"
 #include "bullet.h"
-#include <list>
 
 int main()
 { 
@@ -34,8 +33,7 @@ int main()
 	WindowImage.loadFromFile("images/window.png");
 
 	Player p(heroImage, 600, 300, 40, 86, "Player");
-	
-	
+		
 	
 	list<Enemy*>  Enemies; //список врагов
 	list<Enemy*>::iterator ite;
@@ -43,6 +41,9 @@ int main()
 	list<Bullet*>::iterator itr;
 	list <Place*> windows;
 	list <Place*>::iterator it;
+
+
+
 
 	const int W_COUNT = 6; //максимальное количество окон в игре
 	int wCount = 0; //текущее количество окон в игре
@@ -69,8 +70,14 @@ int main()
 	Clock clock, test;
 	Clock gameTimeClock;
 
-	float gameTime = 0; float createBullet = 0;
-	//////////////////////////////////////////// Основной (бесконечный) цикл////////////////////////////////////////////////////// 
+
+	float switchdir = 0;
+	Clock swdir;
+
+	float gameTime = 0; 
+	float createBullet = 0;
+	// Основной (бесконечный) цикл 
+
 	while (window.isOpen())
 	{
 		int time = clock.getElapsedTime().asMicroseconds();
@@ -84,13 +91,34 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
 		}
+
 		/////////////////////////////////////////Прорисовка выстрелов////////////////////////////////////////////////////////////
 	/*
+
+
+
+		/////////////////Смена направления///////////
+		int swTime = swdir.getElapsedTime().asSeconds();
+		cout << "     " << swTime << endl;
+		if (switchdir < 20) {
+			switchdir += swTime;
+		}
+		else
+		{
+			psycho.direction = rand() % 3;
+			switchdir = 0;
+			swdir.restart();
+		}
+
+
+		/////////////Рандомные выстрелы/////////////////////////////////////////
+		
 		int testTime = test.getElapsedTime().asSeconds();
 	//	cout << testTime <<"       " << createBullet << endl;
 		if (createBullet < 500) {
 			createBullet += testTime;
 		}
+
 		else
 		{
 			for (ite = Enemies.begin(); ite != Enemies.end(); ite++) 
@@ -116,9 +144,25 @@ int main()
 		
 
 
+
 		/////////////////////////////////////////////Загрузка пули/////////////////////////////
 		
-	/*	for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+
+		//оживляем врагов
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+		{
+			(*ite)->update(time); //запускаем метод update()
+		}
+
+		//рисуем врагов
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+		{
+			window.draw((*ite)->sprite); //рисуем enemies объекты
+		}
+
+
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+
 		{
 			(*itr)->update(time); //запускаем метод update()
 		}
@@ -136,15 +180,16 @@ int main()
 				}
 			else
 				itr++;													//и идем курсором (итератором) к след объекту.
-		}*/
+		}
 ///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
 		{
 			(*it)->update(time);										//применяем метод update(time) класса Place для объектов из списка
 		}
 
-		p.PlayerScore -= 0.1;
-	//	cout << p.PlayerScore << endl;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		
+		p.PlayerScore -= 0.1;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+
 
 		////////////////////////////////пересечение с окном//////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
@@ -199,11 +244,13 @@ int main()
 		window.draw(p.sprite);
 		///////////////////////////////////////////рисуем врагов/////////////////////
 
+
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
 			window.draw((*ite)->sprite); //рисуем enemies объекты
 		}
 		///////////////////////////////draw bullets//////////////////////////////////
+
 		
 	/*	for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 		{
