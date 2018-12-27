@@ -106,8 +106,10 @@ int main()
 			}
 		}
 
-	/*	/////////////Рандомные выстрелы/////////////////////////////////////////
+
+/////////////Рандомные выстрелы/////////////////////////////////////////
 		
+
 		int testTime = test.getElapsedTime().asSeconds();
 	//	cout << testTime <<"       " << createBullet << endl;
 		if (createBullet < 500) {
@@ -116,20 +118,21 @@ int main()
 
 		else
 		{
-			for (ite = Enemies.begin(); ite != Enemies.end(); ite++) 
+			for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 			{
 
-				Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand()%(4))); //добавляем в список Bullets пулю
+				Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand() % (3))); //добавляем в список Bullets пулю
 
 			}
 			createBullet = 0;
 			test.restart();
-		}*/
+		}
 		///////////////////////////////////Player download/////////////////////////////////////
 		p.update(time);
 		///////////////////////////////////////////////////////////////////////////////////////
 
 		//////////////////////////////////Enemy update/////////////////////////////////////////	
+
 
 		//оживляем врагов
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
@@ -147,23 +150,10 @@ int main()
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 
 		{
-			(*itr)->update(time); //запускаем метод update()
+			(*itr)->update(time); //запускаем метод update() для пуль 
 		}
 
 		
-		for (itr = Bullets.begin(); itr != Bullets.end(); )				//говорим что проходимся от начала до конца
-		{																// если этот объект мертв, то удаляем его
-			Bullet *t = *itr;
-			t->update(time);
-
-			if (t->life == false) 
-				{ 
-					itr = Bullets.erase(itr);  
-					delete t;
-				}
-			else
-				itr++;													//и идем курсором (итератором) к след объекту.
-		}
 ///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
 		for (it = windows.begin();it != windows.end();it++)
 		{
@@ -183,17 +173,33 @@ int main()
 			(*it)->CurrentFrame = 1;										//закрытие окна после получения очков
 		}
 		//////////////////////////////////Проверка пересечения ИГрока с тапками /////////////////////////////////////////////////
-		/*
+		
 		if (p.life == true) {												//если игрок жив
 			for (itr = Bullets.begin(); itr != Bullets.end(); itr++) {						//бежим по списку врагов
 				if ((*itr)->getRect().intersects (p.getRect()) && ((*itr)->name == "Bullet"))
 				{
 					p.PlayerScore -= 50 ;
 					(*itr)->life = false; 
+					
 				}
 			}
-		}*/
+		}
 
+
+		for (itr = Bullets.begin(); itr != Bullets.end(); )				//говорим что проходимся от начала до конца
+		{																// если этот объект мертв, то удаляем его
+			Bullet *t = *itr;
+			t->update(time);
+
+			if (t->life == false)
+			{
+				cout << *itr << "     ";
+				itr = Bullets.erase(itr);
+				delete t;
+			}
+				else
+				itr++;													//и идем курсором (итератором) к след объекту.
+		}
 		///////////////////////////////////////////////////////////////////////////////////
 		window.clear(); 
 
@@ -235,12 +241,12 @@ int main()
 		///////////////////////////////draw bullets//////////////////////////////////
 
 		
-	/*	for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 		{
 			if ((*itr)->life) //если пули живы
 				window.draw((*itr)->sprite); //рисуем объекты
 		}
-		*/
+		
 
 		if (p.PlayerScore <= 0) {
 			p.life = false;
