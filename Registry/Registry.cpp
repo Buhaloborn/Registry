@@ -70,9 +70,7 @@ int main()
 	Clock clock, test;
 	Clock gameTimeClock;
 
-
-	float switchdir = 0;
-	Clock swdir;
+	
 
 	float gameTime = 0; 
 	float createBullet = 0;
@@ -93,25 +91,22 @@ int main()
 		}
 
 		/////////////////////////////////////////Прорисовка выстрелов////////////////////////////////////////////////////////////
-	/*
+	
 
 
 
-		/////////////////Смена направления///////////
-		int swTime = swdir.getElapsedTime().asSeconds();
-		cout << "     " << swTime << endl;
-		if (switchdir < 20) {
-			switchdir += swTime;
-		}
-		else
+		/////////////////Смена направления///////////		
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
-			psycho.direction = rand() % 3;
-			switchdir = 0;
-			swdir.restart();
+			float switchdir = 0;
+			switchdir = rand() % 25;	     
+			 if (switchdir > 23) 
+			{
+				(*ite)->direction = rand() % 3;
+			}
 		}
 
-
-		/////////////Рандомные выстрелы/////////////////////////////////////////
+	/*	/////////////Рандомные выстрелы/////////////////////////////////////////
 		
 		int testTime = test.getElapsedTime().asSeconds();
 	//	cout << testTime <<"       " << createBullet << endl;
@@ -134,19 +129,7 @@ int main()
 		p.update(time);
 		///////////////////////////////////////////////////////////////////////////////////////
 
-		//////////////////////////////////Enemy update/////////////////////////////////////////
-
-		//оживляем врагов
-		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
-		{
-			(*ite)->update(time); //запускаем метод update()
-		}
-		
-
-
-
-		/////////////////////////////////////////////Загрузка пули/////////////////////////////
-		
+		//////////////////////////////////Enemy update/////////////////////////////////////////	
 
 		//оживляем врагов
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
@@ -160,7 +143,7 @@ int main()
 			window.draw((*ite)->sprite); //рисуем enemies объекты
 		}
 
-
+		/////////////////////////////////////////////Загрузка пули/////////////////////////////
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 
 		{
