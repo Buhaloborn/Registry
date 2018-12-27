@@ -5,7 +5,7 @@
 ////////////////////////////Игрок//////////////////////// 
 class Player : public Entity {
 public:
-	int PlayerScore;//эта переменная может быть только у игрока 
+	float PlayerScore;//эта переменная может быть только у игрока 
 	Player(Image &image, float X, float Y, int W, int H, string Name) :Entity(image, X, Y, W, H, Name)
 	{
 		PlayerScore = 1000;
