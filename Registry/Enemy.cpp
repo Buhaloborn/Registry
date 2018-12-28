@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "map.h"
+#include <iostream>
 using namespace std;
+using namespace sf;
 
 ////////////////////////////Псих//////////////////////// 
 void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновений с картой
@@ -12,25 +14,25 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновен
 			{
 				if (Dy > 0) {
 					y = i * 32 - h;  dy = -0.1;
-					direction = rand() % (4); //Направление движения врага
+					direction = 2; //Направление движения врага
 				}//по Y 
 				if (Dy < 0) {
 					y = i * 32 + 32; dy = 0.1;
-					direction = rand() % (4);//Направление движения врага 
+					direction = 3;//Направление движения врага 
 				}//столкновение с верхними краями 
 				if (Dx > 0) {
 					x = j * 32 - w; dx = -0.1;
-					direction = rand() % (4);//Направление движения врага 
+					direction = 1;//Направление движения врага 
 				}//с правым краем карты
 				if (Dx < 0) {
 					x = j * 32 + 32; dx = 0.1;
-					direction = rand() % (4); //Направление движения врага
-				}// с левым краем карты
+					direction = 0; // с левым краем карты
+				}
 			}
 		}
 }
 
-	void Enemy::update(float time)
+	void Enemy::update(float time, float xpos, float ypos)
 	{
 		if (name == "Psycho") {
 
@@ -41,28 +43,28 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновен
 					dx = speed; dy = 0;
 					CurrentFrame += 0.0065*time;
 					if (CurrentFrame > 4) CurrentFrame -= 4;
-					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 87, 40, 86));
 					break;
 				}
 				case 1: {//состояние идти влево 
 					dx = -speed; dy = 0;
 					CurrentFrame += 0.0065*time;
 					if (CurrentFrame > 4) CurrentFrame -= 4;
-					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 1, 40, 86));
 					break;
 				}
 				case 2: {//идти вверх 
 					dy = -speed; dx = 0;
 					CurrentFrame += 0.0065*time;
 					if (CurrentFrame > 4) CurrentFrame -= 4;
-					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
+					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 259, 40, 86));
 					break;
 				}
 				case 3: {//идти вниз 
 					dy = speed; dx = 0;
 					CurrentFrame += 0.0065*time;
 					if (CurrentFrame > 4) CurrentFrame -= 4;
-					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
+					sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 173, 40, 86));
 					break;
 				}
 				}
@@ -71,10 +73,8 @@ void Enemy::checkCollisionWithMap(float Dx, float Dy)//ф-ция проверки столкновен
 				checkCollisionWithMap(dx, 0);//
 				y += dy * time; //движение по “Y” 
 				checkCollisionWithMap(0, dy);//
-
+				
 				sprite.setPosition(x, y); //спрайт в позиции (x, y). 
-
-				//if (PlayerScore <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
 			}
 		}
 	}

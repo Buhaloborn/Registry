@@ -1,14 +1,15 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 #include "Entity.h"
-
-
 
 ////////////////////////////Игрок//////////////////////// 
 class Player : public Entity {
 public:
-	int PlayerScore;//эта переменная может быть только у игрока 
+	float PlayerScore;//эта переменная может быть только у игрока 
+	bool invinc ;
 	Player(Image &image, float X, float Y, int W, int H, string Name) :Entity(image, X, Y, W, H, Name)
 	{
+		invinc = false;
 		PlayerScore = 1000;
 		state = stay;
 		if (name == "Player")
@@ -20,5 +21,6 @@ public:
 
 	void checkCollisionWithMap(float Dx, float Dy);
 	void control();
-	void update(float time); //метод "оживления обновления" объекта класса. 
+	void update(float time, float xpos, float ypos); //метод "оживления обновления" объекта класса. 
 };
+#endif

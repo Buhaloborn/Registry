@@ -1,9 +1,10 @@
-#include "Player.h"
+п»ї#include "Player.h"
 #include "map.h"
 
 using namespace std;
 
-////////////////////////////Игрок//////////////////////// 
+
+////////////////////////////РРіСЂРѕРє//////////////////////// 
 	void Player::control() 
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Left)) 
@@ -29,73 +30,71 @@ using namespace std;
 	};
 
 
-	void Player::update(float time) //метод "оживления/обновления" объекта класса. 
+	void Player::update(float time, float xpos, float ypos) //РјРµС‚РѕРґ "РѕР¶РёРІР»РµРЅРёСЏ/РѕР±РЅРѕРІР»РµРЅРёСЏ" РѕР±СЉРµРєС‚Р° РєР»Р°СЃСЃР°. 
 	{
 		if (life)
-		{//проверяем, жив ли герой 
-			control();//функция управления персонажем 
-			switch (state)//делаются различные действия в зависимости от состояния 
+		{//РїСЂРѕРІРµСЂСЏРµРј, Р¶РёРІ Р»Рё РіРµСЂРѕР№ 
+			control();//С„СѓРЅРєС†РёСЏ СѓРїСЂР°РІР»РµРЅРёСЏ РїРµСЂСЃРѕРЅР°Р¶РµРј 
+			switch (state)//РґРµР»Р°СЋС‚СЃСЏ СЂР°Р·Р»РёС‡РЅС‹Рµ РґРµР№СЃС‚РІРёСЏ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЃРѕСЃС‚РѕСЏРЅРёСЏ 
 			{
-			case right: {//состояние идти вправо 
+			case right: {//СЃРѕСЃС‚РѕСЏРЅРёРµ РёРґС‚Рё РІРїСЂР°РІРѕ 
 				dx = speed; dy = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 87, 40, 86));
 				break;
 			}
-			case left: {//состояние идти влево 
+			case left: {//СЃРѕСЃС‚РѕСЏРЅРёРµ РёРґС‚Рё РІР»РµРІРѕ 
 				dx = -speed; dy = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
 				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
 				break;
 			}
-			case up: {//идти вверх 
+			case up: {//РёРґС‚Рё РІРІРµСЂС… 
 				dy = -speed; dx = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 259, 40, 86));
 				break;
 			}
-			case down: {//идти вниз 
+			case down: {//РёРґС‚Рё РІРЅРёР· 
 				dy = speed; dx = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 173, 40, 86));
 				break;
 			}
-			case stay: {//стоим 
+			case stay: {//СЃС‚РѕРёРј 
 				dy = speed;
 				dx = speed;
 				break;
 			}
 			}
 
-			x += dx * time; //движение по “X” 
+			x += dx * time; //РґРІРёР¶РµРЅРёРµ РїРѕ вЂњXвЂќ 
 			checkCollisionWithMap(dx, 0);
-			y += dy * time; //движение по “Y” 
+			y += dy * time; //РґРІРёР¶РµРЅРёРµ РїРѕ вЂњYвЂќ 
 			checkCollisionWithMap(0, dy);
 
-			speed = 0; //обнуляем скорость, чтобы персонаж остановился. 
-			state = stay; //состояние - стоим 
+			speed = 0; //РѕР±РЅСѓР»СЏРµРј СЃРєРѕСЂРѕСЃС‚СЊ, С‡С‚РѕР±С‹ РїРµСЂСЃРѕРЅР°Р¶ РѕСЃС‚Р°РЅРѕРІРёР»СЃСЏ. 
+			state = stay; //СЃРѕСЃС‚РѕСЏРЅРёРµ - СЃС‚РѕРёРј 
 
-			sprite.setPosition(x, y); //спрайт в позиции (x, y). 
-
-			if (health <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
+			sprite.setPosition(x, y); //СЃРїСЂР°Р№С‚ РІ РїРѕР·РёС†РёРё (x, y). 
 		}
 	}
 
 	void Player::checkCollisionWithMap(float Dx, float Dy) {
 		
-		for (int i = y / 32; i < (y + h) / 32; i++)//проходимся по элементам карты
+		for (int i = y / 32; i < (y + h) / 32; i++)//РїСЂРѕС…РѕРґРёРјСЃСЏ РїРѕ СЌР»РµРјРµРЅС‚Р°Рј РєР°СЂС‚С‹
 			for (int j = x / 32; j < (x + w) / 32; j++)
 			{
-				if ((TileMap[i][j] == '0') or (TileMap[i][j] == 'X')) //если cтена
+				if ((TileMap[i][j] == '0') or (TileMap[i][j] == 'X')) //РµСЃР»Рё cС‚РµРЅР°
 				{
-					if (Dy > 0) { y = i * 32 - h;  dy = 0;}//по Y 
-					if (Dy < 0) { y = i * 32 + 40; dy = 0;}//столкновение с верхними краями карты
-					if (Dx > 0) { x = j * 32 - w; dx = 0;}//с правым краем карты
-					if (Dx < 0) { x = j * 32 + 40; dx = 0;}// с левым краем карты
+					if (Dy > 0) { y = i * 32 - h;  dy = 0;}//РїРѕ Y 
+					if (Dy < 0) { y = i * 32 + 40; dy = 0;}//СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ СЃ РІРµСЂС…РЅРёРјРё РєСЂР°СЏРјРё РєР°СЂС‚С‹
+					if (Dx > 0) { x = j * 32 - w; dx = 0;}//СЃ РїСЂР°РІС‹Рј РєСЂР°РµРј РєР°СЂС‚С‹
+					if (Dx < 0) { x = j * 32 + 40; dx = 0;}// СЃ Р»РµРІС‹Рј РєСЂР°РµРј РєР°СЂС‚С‹
 				}
 			}
 	};

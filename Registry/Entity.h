@@ -24,5 +24,5 @@ public:
 
 	FloatRect getRect(); //метод получения прямоугольника. его коорд, размеры (шир,высот). 
 
-	virtual void update(float time) = 0;
+	virtual void update(float time, float xpos, float ypos) = 0;
 };
