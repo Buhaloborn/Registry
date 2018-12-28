@@ -21,6 +21,6 @@ public:
 
 	void checkCollisionWithMap(float Dx, float Dy);
 	void control();
-	void update(float time); //метод "оживления обновления" объекта класса. 
+	void update(float time, float xpos, float ypos); //метод "оживления обновления" объекта класса. 
 };
 #endif

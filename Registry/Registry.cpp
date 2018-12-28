@@ -23,7 +23,7 @@ int main()
 	heroImage.loadFromFile("images/hero.png");
 
 	Image BulletImage;
-	BulletImage.loadFromFile("images/bullet.png");
+	BulletImage.loadFromFile("images/sandal.png");
 
 
 	Image EnemyImage;
@@ -100,7 +100,7 @@ int main()
 		{
 			float switchdir;
 			switchdir = rand() % 50;
-			if (switchdir > 45)
+			if (switchdir > 48)
 			{
 				(*ite)->direction = rand() % 3;
 			}
@@ -123,7 +123,7 @@ int main()
 				{	
 					int switchdirbul = rand() % 10;
 					if (switchdirbul > 3)
-					Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand() % (3))); //добавляем в список Bullets пулю
+					Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet",rand()%(7))); //добавляем в список Bullets пулю
 
 				}
 				createBullet = 0;
@@ -131,11 +131,11 @@ int main()
 			}
 		}
 		///////////////////////////////////Player download/////////////////////////////////////
-		p.update(time);
+		p.update(time, p.x, p.y);
 
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
-			(*ite)->update(time); //запускаем метод update()
+			(*ite)->update(time, p.x, p.y); //запускаем метод update()
 		}
 
 		//рисуем врагов
@@ -148,14 +148,14 @@ int main()
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 
 		{
-			(*itr)->update(time); //запускаем метод update() для пуль 
+			(*itr)->update(time, p.x, p.y); //запускаем метод update() для пуль 
 		}
 
 
 		///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
 		for (it = windows.begin(); it != windows.end(); it++)
 		{
-			(*it)->update(time);										//применяем метод update(time) класса Place для объектов из списка
+			(*it)->update(time);//применяем метод update(time) класса Place для объектов из списка
 		}
 
 		if (p.PlayerScore > 0)
@@ -206,7 +206,7 @@ int main()
 		for (itr = Bullets.begin(); itr != Bullets.end(); )				//говорим что проходимся от начала до конца
 		{																// если этот объект мертв, то удаляем его
 			Bullet *t = *itr;
-			t->update(time);
+			t->update(time,p.x,p.y);
 
 			if (t->life == false)
 			{
@@ -271,6 +271,10 @@ int main()
 			(*ite)->life = false;
 			for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 				(*itr)->life = false;
+			for (it = windows.begin();it != windows.end();it++)
+			{
+				(*it)->CurrentFrame = 1;
+			}
 
 		}
 		
