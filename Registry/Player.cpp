@@ -30,7 +30,7 @@ using namespace std;
 	};
 
 
-	void Player::update(float time) //метод "оживления/обновления" объекта класса. 
+	void Player::update(float time, float xpos, float ypos) //метод "оживления/обновления" объекта класса. 
 	{
 		if (life)
 		{//проверяем, жив ли герой 
@@ -41,7 +41,7 @@ using namespace std;
 				dx = speed; dy = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 0, 40, 86));
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 87, 40, 86));
 				break;
 			}
 			case left: {//состояние идти влево 
@@ -55,14 +55,14 @@ using namespace std;
 				dy = -speed; dx = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 172, 40, 86));
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 259, 40, 86));
 				break;
 			}
 			case down: {//идти вниз 
 				dy = speed; dx = 0;
 				CurrentFrame += 0.0065*time;
 				if (CurrentFrame > 4) CurrentFrame -= 4;
-				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 86, 40, 86));
+				sprite.setTextureRect(IntRect(40 * int(CurrentFrame), 173, 40, 86));
 				break;
 			}
 			case stay: {//стоим 
