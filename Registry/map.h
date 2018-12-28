@@ -1,25 +1,10 @@
-#include <SFML\Graphics.hpp>
-const int Height_Map = 19; //высота карты
-const int Width_Map = 40; //ширина карты
+#ifndef MAP_H
+#define MAP_H
 
-std::string TileMap[Height_Map]{
-	"0000000000000000000000000000000000000000",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0                                      0",
-	"0000000000000000000000000000000000000000",
-};
+using namespace std;
+const int Height_Map = 18; //высота карты
+const int Width_Map = 32;
+extern string TileMap[Height_Map];
+
+#endif
+
