@@ -87,7 +87,8 @@ using namespace std;
 		for (int i = y / 32; i < (y + h) / 32; i++)//проходимся по элементам карты
 			for (int j = x / 32; j < (x + w) / 32; j++)
 			{
-				if ((TileMap[i][j] == '0') or (TileMap[i][j] == 'X')) //если cтена
+				if ((TileMap[i][j] == '0') || (TileMap[i][j] == 'E') || (TileMap[i][j] == 'X') ||
+					(TileMap[i][j] == 'I') || (TileMap[i][j] == 'T')) //если cтена
 				{
 					if (Dy > 0) { y = i * 32 - h;  dy = 0;}//с нижним краем
 					if (Dy < 0) { y = i * 32 + 40; dy = 0;}//с верхним краем

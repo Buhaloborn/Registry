@@ -2,6 +2,7 @@
 #include "map.h"
 
 void Bullet::update(float time, float xpos, float ypos) 
+
 {
 	if (name == "Bullet")
 	{
@@ -33,6 +34,7 @@ void Bullet::update(float time, float xpos, float ypos)
 				else direction = 4; //south
 		////////в зависимости от положения игрока, тапки будут на него наводиться////////
 		////////присвоение dx и dy в зависимости от направления
+
 			switch (direction)
 			{
 			case 0: dx = 0; dy = -speed;
@@ -103,7 +105,7 @@ void Bullet::update(float time, float xpos, float ypos)
 					for (int i = y / 32; i < (y + h) / 32; i++)//проходимся по элементам карты
 						for (int j = x / 32; j < (x + w) / 32; j++)
 						{
-							if (TileMap[i][j] == '0' || time > 30 + rand()%(15))//если пуля пересекается с краем карты или
+							if (TileMap[i][j] == '0' || time > 50 + rand()%(15))//если пуля пересекается с краем карты или
 								life = false;									//не успевает долететь до игрока, то умирает
 						}
 					sprite.setPosition(x + w, y);//задается позиция пули
