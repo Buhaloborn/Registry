@@ -32,9 +32,6 @@ int main()
 	Image WindowImage;
 	WindowImage.loadFromFile("images/window.png");
 
-	Image ButtonImage;
-	ButtonImage.loadFromFile("images/yes_no.png");
-
 	Player p(heroImage, 364, 453, 40, 86, "Player");
 		
 	list<Enemy*>  Enemies; //список врагов
