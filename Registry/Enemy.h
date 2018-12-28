@@ -18,5 +18,5 @@ public:
 		}
 	}
 	void checkCollisionWithMap(float Dx, float Dy);
-	void update(float time, float xpos, float ypos);
+	void update(float time);
 };
