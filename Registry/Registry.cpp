@@ -32,7 +32,7 @@ int main()
 	Image WindowImage;
 	WindowImage.loadFromFile("images/window.png");
 
-	Player p(heroImage, 600, 300, 40, 86, "Player");
+	Player p(heroImage, 492, 453, 40, 86, "Player");
 		
 	
 	list<Enemy*>  Enemies; //список врагов
@@ -67,7 +67,7 @@ int main()
 		wCount++;
 	}
 
-	Clock clock, test;
+	Clock clock, test,enemyclock;
 	Clock gameTimeClock;
 
 	
@@ -79,11 +79,11 @@ int main()
 	while (window.isOpen())
 	{
 		int time = clock.getElapsedTime().asMicroseconds();
-		
-		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds(); 
+
+		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds();
 		clock.restart();
 		time = time / 800;
-		Event event; 
+		Event event;
 		while (window.pollEvent(event)) //Опрос событий 
 		{
 			if (event.type == Event::Closed)
@@ -91,7 +91,7 @@ int main()
 		}
 
 		/////////////////////////////////////////Прорисовка выстрелов////////////////////////////////////////////////////////////
-	
+
 
 
 
@@ -99,42 +99,40 @@ int main()
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
 			float switchdir;
-			switchdir = rand() % 50;	     
-			 if (switchdir > 48) 
+			switchdir = rand() % 50;
+			if (switchdir > 45)
 			{
 				(*ite)->direction = rand() % 3;
 			}
 		}
 
 
-/////////////Рандомные выстрелы/////////////////////////////////////////
-		
+		/////////////Рандомные выстрелы/////////////////////////////////////////
 
-		int testTime = test.getElapsedTime().asSeconds();
-	//	cout << testTime <<"       " << createBullet << endl;
-		if (createBullet < 500) {
-			createBullet += testTime;
-		}
-
-		else
+		if (p.PlayerScore > 0)
 		{
-			for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
-			{
-
-				Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand() % (3))); //добавляем в список Bullets пулю
-
+			int testTime = test.getElapsedTime().asSeconds();
+			//	cout << testTime <<"       " << createBullet << endl;
+			if (createBullet < 300) {
+				createBullet += testTime;
 			}
-			createBullet = 0;
-			test.restart();
+
+			else
+			{
+				for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+				{	
+					int switchdirbul = rand() % 10;
+					if (switchdirbul > 3)
+					Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet", rand() % (3))); //добавляем в список Bullets пулю
+
+				}
+				createBullet = 0;
+				test.restart();
+			}
 		}
 		///////////////////////////////////Player download/////////////////////////////////////
 		p.update(time);
-		///////////////////////////////////////////////////////////////////////////////////////
 
-		//////////////////////////////////Enemy update/////////////////////////////////////////	
-
-
-		//оживляем врагов
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
 			(*ite)->update(time); //запускаем метод update()
@@ -153,39 +151,58 @@ int main()
 			(*itr)->update(time); //запускаем метод update() для пуль 
 		}
 
-		
-///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
-		for (it = windows.begin();it != windows.end();it++)
+
+		///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
+		for (it = windows.begin(); it != windows.end(); it++)
 		{
 			(*it)->update(time);										//применяем метод update(time) класса Place для объектов из списка
 		}
 
-		
-		p.PlayerScore -= 0.02;//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
-
+		if (p.PlayerScore > 0)
+			p.PlayerScore -= 0.02;	//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		if (p.PlayerScore < 0)
+			p.PlayerScore = 0;
 
 		////////////////////////////////пересечение с окном//////////////////////////////////
-		for (it = windows.begin();it != windows.end();it++)
-		if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen) 
+		for (it = windows.begin(); it != windows.end(); it++)
+			if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen)
 
-		{																	//проверка пересечения игрока с окном
-			p.PlayerScore += 80;											//начисление очков, если окно открыто
-			(*it)->CurrentFrame = 1;										//закрытие окна после получения очков
-		}
+			{																	//проверка пересечения игрока с окном
+				p.PlayerScore += 80;											//начисление очков, если окно открыто
+				(*it)->CurrentFrame = 1;										//закрытие окна после получения очков
+			}
 		//////////////////////////////////Проверка пересечения ИГрока с тапками /////////////////////////////////////////////////
-		
+
 		if (p.life == true) {												//если игрок жив
 			for (itr = Bullets.begin(); itr != Bullets.end(); itr++) {						//бежим по списку врагов
-				if ((*itr)->getRect().intersects (p.getRect()) && ((*itr)->name == "Bullet"))
+				if ((*itr)->getRect().intersects(p.getRect()) && ((*itr)->name == "Bullet"))
 				{
-					p.PlayerScore -= 50 ;
-					(*itr)->life = false; 
-					
+					p.PlayerScore -= 50;
+					(*itr)->life = false;
+
 				}
 			}
 		}
-
-
+		/////////////// на пересечение врага и перса 
+		if (p.life == true) //если игрок жив
+		{															
+			int ToW = enemyclock.getElapsedTime().asMilliseconds();
+			if (ToW < 300) {
+			}
+				else
+				{
+					for (ite = Enemies.begin(); ite != Enemies.end(); ite++) //бежим по списку врагов
+					{
+						if ((p.getRect().intersects((*ite)->getRect())) && ((*ite)->name == "Psycho") && p.invinc == false)
+						{
+							p.PlayerScore -= 100;
+							p.invinc = true;
+						}
+					}
+					enemyclock.restart();
+				}
+				p.invinc = false;
+		}
 		for (itr = Bullets.begin(); itr != Bullets.end(); )				//говорим что проходимся от начала до конца
 		{																// если этот объект мертв, то удаляем его
 			Bullet *t = *itr;
@@ -193,7 +210,6 @@ int main()
 
 			if (t->life == false)
 			{
-				cout << *itr << "     ";
 				itr = Bullets.erase(itr);
 				delete t;
 			}
@@ -204,7 +220,7 @@ int main()
 		window.clear(); 
 
 		Font font;
-		font.loadFromFile("GothaProMed.otf");
+		font.loadFromFile("Fonts/GothaProMed.otf");
 		Text text("", font, 20);												//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
 																				//шрифта(в пикселях)
 
@@ -247,12 +263,17 @@ int main()
 				window.draw((*itr)->sprite); //рисуем объекты
 		}
 		
-
-		if (p.PlayerScore <= 0) {
+		////// stop moving
+		if (p.PlayerScore <= 0) 
+		{
 			p.life = false;
+			for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 			(*ite)->life = false;
-		}
+			for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+				(*itr)->life = false;
 
+		}
+		
 		ostringstream playerScoreString; // объявили переменную
 
 		playerScoreString << int (p.PlayerScore); //занесли в нее число очков, то есть формируем строку
