@@ -155,7 +155,7 @@ int main()
 		///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
 		for (it = windows.begin(); it != windows.end(); it++)
 		{
-			(*it)->update(time);										//применяем метод update(time) класса Place для объектов из списка
+			(*it)->update(time);//применяем метод update(time) класса Place для объектов из списка
 		}
 
 		if (p.PlayerScore > 0)
