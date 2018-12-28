@@ -1,206 +1,16 @@
-﻿//тестовый код урока №1 
-#include <SFML/Graphics.hpp> 
 #include <sstream>
 #include <iostream>
+#include <list>
+#include "Player.h"
+#include "Enemy.h"
+#include "Place.h"
 #include "map.h"
-
-using namespace sf;
-using namespace std;
-
-////////////////////////////Абстрактная сущность//////////////////////// 
-class Entity {
-public:
-	enum { left, right, up, down, stay } state;// тип перечисления - состояние объекта 
-	float dx, dy, x, y, speed, moveTimer; 
-	int w, h, health; //хп игрока 
-	bool life; //жизнь, логическая 
-	Texture texture;//сфмл текстура 
-	Sprite sprite;//сфмл спрайт 
-	float CurrentFrame;//хранит текущий кадр 
-	string name;//враги могут быть разные, врагов можно различать по именам 
-	//каждому можно дать свое действие в update() в зависимости от имени 
-
-	Entity(Image &image, float X, float Y, int W, int H, std::string Name) {
-		x = X; y = Y; //координата появления спрайта 
-		w = W; h = H;
-		name = Name;
-		moveTimer = 0;
-		dx = 0; dy = 0;
-		speed = 0;
-		CurrentFrame = 0;
-		health = 100;
-		life = true; //сущность жива
-		texture.loadFromImage(image); //заносим изображение в текстуру 
-		sprite.setTexture(texture); //заливаем спрайт текстурой 
-	}
-
-	FloatRect getRect() {//метод получения прямоугольника. его коорд, размеры (шир,высот). 
-		FloatRect FR(x, y, w, h); 
-		return FR;
-	}
-	virtual void update(float time) = 0;
-};
-
-////////////////////////////Игрок//////////////////////// 
-class Player :public Entity {
-public:
-	int playerScore;//эта переменная может быть только у игрока 
-
-	Player(Image &image, float X, float Y, int W, int H, string Name) :Entity(image, X, Y, W, H, Name) {
-		playerScore = 0;
-		state = stay;
-		if (name == "Player1") {
-			//Задаем спрайту один прямоугольник для вывода одного игрока. IntRect – для приведения типов 
-			sprite.setTextureRect(IntRect(0, 0, w, h));
-		}
-	}
-
-	void control() {
-		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			state = left;
-			speed = 0.1;
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			state = right;
-			speed = 0.1;
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			state = up;
-			speed = 0.1;
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			state = down;
-			speed = 0.1;
-		}
-	}
-
-
-	void update(float time) //метод "оживления/обновления" объекта класса. 
-	{
-		if (life) {//проверяем, жив ли герой 
-			control();//функция управления персонажем 
-			switch (state)//делаются различные действия в зависимости от состояния 
-			{
-			case right: {//состояние идти вправо 
-				dx = speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
-				break;
-			 }
-			case left: {//состояние идти влево 
-				dx = -speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
-				break;
-			 }
-			case up: {//идти вверх 
-				dy = -speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
-				break;
-			 }
-			case down: {//идти вниз 
-				dy = speed;
-				CurrentFrame += 0.005*time;
-				if (CurrentFrame > 3) CurrentFrame -= 3;
-				sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
-				break;
-			 }
-			case stay: {//стоим 
-				dy = speed;
-				dx = speed;
-				break;
-			 }
-			}
-
-			x += dx * time; //движение по “X” 
-			y += dy * time; //движение по “Y” 
-
-			speed = 0; //обнуляем скорость, чтобы персонаж остановился. 
-			state = stay; //состояние - стоим 
-
-			sprite.setPosition(x, y); //спрайт в позиции (x, y). 
-
-			if (health <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
-		}
-	}
-};
-
-////////////////////////////Псих//////////////////////// 
-class Enemy :public Entity {
-public:
-	int direction;//направление движения врага 
-	Enemy(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name) {
-		if (name == "Psycho") {
-			//Задаем спрайту один прямоугольник для 
-			//вывода одного игрока. IntRect – для приведения типов 
-			sprite.setTextureRect(IntRect(0, 0, w, h));
-			direction = rand() % (3); //Направление движения врага задаём случайным образом через генератор случайных чисел 
-			speed = 0.1;//этот объект всегда двигается 
-			dx = speed;
-		}
-	}
-
-	void update(float time)
-	{
-		if (name == "Psycho") {
-
-			if (life) {
-				switch (direction)//делаются различные действия в зависимости от состояния 
-				{
-				case 0: {//состояние идти вправо 
-					dx = speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 192, 96, 96));
-					break;
-				 }
-				case 1: {//состояние идти влево 
-					dx = -speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 96, 96, 96));
-					break;
-				 }
-				case 2: {//идти вверх 
-					dy = -speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 288, 96, 96));
-					break;
-				 }
-				case 3: {//идти вниз 
-					dy = speed;
-					CurrentFrame += 0.005*time;
-					if (CurrentFrame > 3) CurrentFrame -= 3;
-					sprite.setTextureRect(IntRect(96 * int(CurrentFrame), 0, 96, 96));
-					break;
-				 }
-				}
-
-				x += dx * time; //движение по “X” 
-				y += dy * time; //движение по “Y” 
-
-				sprite.setPosition(x, y); //спрайт в позиции (x, y). 
-
-				if (health <= 0) { life = false; }//если жизней меньше 0, либо равно 0, то умираем 
-			}
-		}
-	}
-};
-
-
-
+#include "bullet.h"
 
 int main()
 { 
 	VideoMode desktop = VideoMode::getDesktopMode();
-	RenderWindow window(VideoMode(1280, 608, desktop.bitsPerPixel), "Registry");
+	RenderWindow window(VideoMode(1024, 576, desktop.bitsPerPixel), "Registry");
 
 	Image map_image;
 	map_image.loadFromFile("images/map.png");
@@ -212,54 +22,268 @@ int main()
 	Image heroImage;
 	heroImage.loadFromFile("images/hero.png");
 
+	Image BulletImage;
+	BulletImage.loadFromFile("images/sandal.png");
+
+
 	Image EnemyImage;
 	EnemyImage.loadFromFile("images/enemy.png");
 
-	Player p(heroImage, 600, 300, 96, 96, "Player1");
-	Enemy psycho(EnemyImage, 150, 150, 96, 96, "Psycho");
+	Image WindowImage;
+	WindowImage.loadFromFile("images/window.png");
 
-	Clock clock;
+	Player p(heroImage, 364, 453, 40, 86, "Player");
+		
+	list<Enemy*>  Enemies; //список врагов
+	list<Enemy*>::iterator ite;
+	list<Bullet*>  Bullets; //список пуль
+	list<Bullet*>::iterator itr;
+	list <Place*> windows;
+	list <Place*>::iterator it;
+
+	const int W_COUNT = 6; //максимальное количество окон в игре
+	int wCount = 0; //текущее количество окон в игре
+	const int E_COUNT = 6; //максимальное количество врагов в игре
+	int eCount = 0;
+
+	for (int i = 0; i < E_COUNT; i++)
+	{
+		float xr = 150 + rand() % 500; //случайная координата врага на поле игры по оси “x”
+		float yr = 150 + rand() % 350; //случайная координата врага на поле игры по оси “y”
+		Enemies.push_back(new Enemy(EnemyImage, xr, yr, 40, 86, "Psycho")); //создаем врагов и помещаем в список
+		eCount += 1; //увеличили счётчик врагов
+	}
+
+	for (int i = 0;i < W_COUNT;i++)
+	{
+		float xr = 50 + 122 * i;
+		float yr = 50; //задаём позицию окон
+		windows.push_back(new Place(WindowImage, xr, yr, 60, 75)); //вносим их в список
+		wCount++;
+	}
+
+	Clock clock, test,enemyclock;
 	Clock gameTimeClock;
-	int gameTime = 0;
+
+	float gameTime = 0; 
+	float createBullet = 0;
 	// Основной (бесконечный) цикл 
+
 	while (window.isOpen())
 	{
-		float time = clock.getElapsedTime().asMicroseconds();
+		int time = clock.getElapsedTime().asMicroseconds();
 
 		if (p.life) gameTime = gameTimeClock.getElapsedTime().asSeconds();
-
 		clock.restart();
 		time = time / 800;
-		Event event; 
-		while (window.pollEvent(event)) //Опрос событий 
+		Event event;
+		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
 		}
 
-		p.update(time);
-		psycho.update(time);
+		///////////////////////////////////Оживление объектов/////////////////////////////////////
+		p.update(time, p.x, p.y); //Игрока
 
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++) //Врагов
+		{
+			(*ite)->update(time, p.x, p.y); //запускаем метод update()
+		}
+
+		for (it = windows.begin(); it != windows.end(); it++) //Окон
+		{
+			(*it)->update(time);//применяем метод update(time) класса Place для объектов из списка
+		}
+		
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++) //Пуль
+
+		{
+			(*itr)->update(time, p.x, p.y); //запускаем метод update() для пуль 
+		}
+
+		/////////////////Смена направления///////////		
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+		{
+			float switchdir;
+			switchdir = rand() % 50;
+			if (switchdir > 48)
+			{
+				(*ite)->direction = rand() % 3;
+			}
+		}
+
+		/////////////Генерация выстрелов/////////////////////////////////////////
+
+		if (p.PlayerScore > 0)
+		{
+			int testTime = test.getElapsedTime().asSeconds();
+			if (createBullet < 300) {
+				createBullet += testTime;
+			}
+			else
+			{
+				for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+				{	
+					int switchdirbul = rand() % 10;
+					if (switchdirbul > 3)
+					Bullets.push_back(new Bullet(BulletImage, (*ite)->x, (*ite)->y, 16, 16, "Bullet",rand()%(7))); //добавляем в список Bullets пулю
+
+				}
+				createBullet = 0;
+				test.restart();
+			}
+		}
+
+		///////////////////////////////////// Пересечения/////////////////////////////////////////////////////////
+		////////////////////////С окнами////////////////////////////
+		for (it = windows.begin(); it != windows.end(); it++) //С окнами//
+			if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen)
+			{																	//проверка пересечения игрока с окном
+				p.PlayerScore += 80;											//начисление очков, если окно открыто
+				(*it)->CurrentFrame = 1;										//закрытие окна после получения очков
+			}
+		/////////////////////////Игрока со снарядами //////////////////////////////////
+		if (p.life == true) {												//если игрок жив
+			for (itr = Bullets.begin(); itr != Bullets.end(); itr++) {						//бежим по списку врагов
+				if ((*itr)->getRect().intersects(p.getRect()) && ((*itr)->name == "Bullet"))
+				{
+					p.PlayerScore -= 50; //снятие очков
+					(*itr)->life = false;
+				}
+			}
+		}
+		///////////////Врага и игрока/////////////// 
+		if (p.life == true) //если игрок жив
+		{															
+			int ToW = enemyclock.getElapsedTime().asMilliseconds();
+			if (ToW < 300) {
+			}
+				else
+				{
+					for (ite = Enemies.begin(); ite != Enemies.end(); ite++) //бежим по списку врагов
+					{
+						if ((p.getRect().intersects((*ite)->getRect())) && ((*ite)->name == "Psycho") && p.invinc == false)
+						{
+							p.PlayerScore -= 100; //забираем очки
+							p.invinc = true; //даем временную неуязвимость
+						}
+					}
+					enemyclock.restart();
+				}
+				p.invinc = false;
+		}
+
+
+		////////////////Очистка контейнера с пулями/////////////
+		for (itr = Bullets.begin(); itr != Bullets.end(); )				//проходимся от начала до конца
+		{																//если этот объект мертв, то удаляем его
+			Bullet *t = *itr;
+			t->update(time,p.x,p.y);
+			if (t->life == false)
+			{
+				itr = Bullets.erase(itr);
+				delete t;
+			}
+				else
+				itr++; //и идем итератором к след объекту.
+		}
+	
 		window.clear(); 
 
-		//////////Карта///////////
+		Font font1, font2;
+		font1.loadFromFile("Fonts/GothaProBla.otf");
+		font2.loadFromFile("Fonts/GothaProMed.otf");
+		Text bigtext("", font1, 80),//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
+			smalltext("", font2, 40),//шрифта(в пикселях)
+			rule1("", font2, 25), rule2("", font2, 25), rule3("", font2, 25), //big text
+			ruleOne("", font1, 80), ruleTwo("", font1, 80), ruleThree("", font1, 80); //small text
+
+		//////////////////////////////////Карта//////////////////////////////////////////
 		for (int i = 0; i < Height_Map; i++)
 			for (int j = 0; j < Width_Map; j++)
 			{
-				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(0, 0, 32, 32)); //если встретили пробел, то рисуем 1-й квадратик 
-				 
-				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(64, 0, 32, 32));//если встретили 0, то рисуем 3й квадратик 
+				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 1й квадратик 
+				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 2й квадратик 
 
-				s_map.setPosition(j * 32, i * 32);//раскладываем квадратики в карту. 
+				if ((TileMap[i][j] == '-')) s_map.setTextureRect(IntRect(64, 0, 32, 32));//если встретили -, то рисуем черноту
 
-				window.draw(s_map);//рисуем квадратики на экран 
+				if ((TileMap[i][j] == 'E')) s_map.setTextureRect(IntRect(96, 0, 32, 32));// рисуем EXIT
+				if ((TileMap[i][j] == 'X')) s_map.setTextureRect(IntRect(128, 0, 32, 32));//
+				if ((TileMap[i][j] == 'I')) s_map.setTextureRect(IntRect(160, 0, 32, 32));//
+				if ((TileMap[i][j] == 'T')) s_map.setTextureRect(IntRect(192, 0, 32, 32));//
+				
+				s_map.setPosition(j * 32, i * 32);											//раскладываем квадратики в карту. 
+				window.draw(s_map);													
 			}
+		
+		///////////////////////////////Отрисовка объектов///////////////////////////////////////////////
+		window.draw(p.sprite); //игрок
 
-		window.draw(p.sprite);
-		window.draw(psycho.sprite);
+		for (it = windows.begin();it != windows.end();it++) //окна
+		{
+			window.draw((*it)->sprite);
+		}
+
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+		{
+			window.draw((*ite)->sprite); //рисуем enemies объекты
+		}
+
+		///////////////////////////////draw bullets//////////////////////////////////
+
+
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+		{
+			if ((*itr)->life) //если пули живы
+				window.draw((*itr)->sprite); //рисуем объекты
+		}
+		
+
+		/////////Снятие очков со временем/////
+		if (p.PlayerScore > 0)
+			p.PlayerScore -= 0.02;	//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		if (p.PlayerScore < 0)
+			p.PlayerScore = 0;
+
+		////// Конец игры/////////
+		ostringstream playerScoreString, timeString; // объявили переменную
+
+		if (p.PlayerScore <= 0) 
+		{
+			p.life = false;
+			for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
+			(*ite)->life = false;
+			for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
+				(*itr)->life = false;
+			for (it = windows.begin();it != windows.end();it++)
+			{
+				(*it)->CurrentFrame = 1;
+			}
+		}
+		
+
+		playerScoreString << int (p.PlayerScore); //занесли в нее число очков, то есть формируем строку
+		
+		bigtext.setString(playerScoreString.str()); //задаем строку тексту и вызываем
+		smalltext.setString("POINTS");              //сформированную выше строку методом .str()
+		
+		bigtext.setPosition(800, 20);//задаем позицию текста
+		smalltext.setPosition(800, 100);
+		
+		window.draw(bigtext);//рисуем этот текст
+		window.draw(smalltext);
+		
+		rule1.setString("SANDAL"); rule2.setString("WINDOW"), rule3.setString("ENEMY");
+		ruleOne.setString("-50"); ruleTwo.setString("+80"); ruleThree.setString("-100");
+		ruleOne.setPosition(800, 270);  window.draw(ruleOne);
+		ruleTwo.setPosition(800, 370);  window.draw(ruleTwo);
+		ruleThree.setPosition(800, 470);  window.draw(ruleThree);
+		rule1.setPosition(800, 260);  window.draw(rule1);
+		rule2.setPosition(800, 360);  window.draw(rule2);
+		rule3.setPosition(800, 460);  window.draw(rule3);
 
 		window.display();  
 	}
-
 	return 0;
 }
