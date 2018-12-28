@@ -32,9 +32,11 @@ int main()
 	Image WindowImage;
 	WindowImage.loadFromFile("images/window.png");
 
-	Player p(heroImage, 492, 453, 40, 86, "Player");
+	Image ButtonImage;
+	ButtonImage.loadFromFile("images/yes_no.png");
+
+	Player p(heroImage, 364, 453, 40, 86, "Player");
 		
-	
 	list<Enemy*>  Enemies; //список врагов
 	list<Enemy*>::iterator ite;
 	list<Bullet*>  Bullets; //список пуль
@@ -61,7 +63,7 @@ int main()
 
 	for (int i = 0;i < W_COUNT;i++)
 	{
-		float xr = 50 + 172 * i;
+		float xr = 50 + 122 * i;
 		float yr = 50; //задаём позицию окон
 		windows.push_back(new Place(WindowImage, xr, yr, 60, 75)); //вносим их в список
 		wCount++;
@@ -219,10 +221,13 @@ int main()
 		///////////////////////////////////////////////////////////////////////////////////
 		window.clear(); 
 
-		Font font;
-		font.loadFromFile("Fonts/GothaProMed.otf");
-		Text text("", font, 20);												//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
-																				//шрифта(в пикселях)
+		Font font1, font2;
+		font1.loadFromFile("Fonts/GothaProBla.otf");
+		font2.loadFromFile("Fonts/GothaProMed.otf");
+		Text bigtext("", font1, 80),//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
+			smalltext("", font2, 40),//шрифта(в пикселях)
+			rule1("", font2, 25), rule2("", font2, 25), rule3("", font2, 25), //big text
+			ruleOne("", font1, 80), ruleTwo("", font1, 80), ruleThree("", font1, 80); //small text
 
 
 		//////////////////////////////////Карта//////////////////////////////////////////
@@ -232,9 +237,14 @@ int main()
 				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 1й квадратик 
 
 				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 2й квадратик 
+				
+				if ((TileMap[i][j] == '-')) s_map.setTextureRect(IntRect(64, 0, 32, 32));//если встретили -, то рисуем черноту
 
-				if ((TileMap[i][j] == 'X')) s_map.setTextureRect(IntRect(96, 0, 32, 32));//если встретили X, то рисуем 4й квадратик (дверь)
-
+				if ((TileMap[i][j] == 'E')) s_map.setTextureRect(IntRect(96, 0, 32, 32));// рисуем EXIT
+				if ((TileMap[i][j] == 'X')) s_map.setTextureRect(IntRect(128, 0, 32, 32));//
+				if ((TileMap[i][j] == 'I')) s_map.setTextureRect(IntRect(160, 0, 32, 32));//
+				if ((TileMap[i][j] == 'T')) s_map.setTextureRect(IntRect(192, 0, 32, 32));//
+				
 				s_map.setPosition(j * 32, i * 32);											//раскладываем квадратики в карту. 
 
 				window.draw(s_map);															//рисуем квадратики на экран 
@@ -256,13 +266,14 @@ int main()
 		}
 		///////////////////////////////draw bullets//////////////////////////////////
 
-		
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 		{
 			if ((*itr)->life) //если пули живы
 				window.draw((*itr)->sprite); //рисуем объекты
 		}
 		
+		ostringstream playerScoreString, timeString; // объявили переменную
+
 		////// stop moving
 		if (p.PlayerScore <= 0) 
 		{
@@ -275,17 +286,29 @@ int main()
 			{
 				(*it)->CurrentFrame = 1;
 			}
-
 		}
 		
-		ostringstream playerScoreString; // объявили переменную
 
 		playerScoreString << int (p.PlayerScore); //занесли в нее число очков, то есть формируем строку
-		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
-																	 //сформированную выше строку методом .str()
-		text.setPosition(500, 500);//задаем позицию текста
-		window.draw(text);//рисуем этот текст
 		
+		bigtext.setString(playerScoreString.str()); //задаем строку тексту и вызываем
+		smalltext.setString("POINTS");              //сформированную выше строку методом .str()
+		
+		bigtext.setPosition(800, 20);//задаем позицию текста
+		smalltext.setPosition(800, 100);
+		
+		window.draw(bigtext);//рисуем этот текст
+		window.draw(smalltext);
+		
+		rule1.setString("SANDAL"); rule2.setString("WINDOW"), rule3.setString("ENEMY");
+		ruleOne.setString("-50"); ruleTwo.setString("+80"); ruleThree.setString("-100");
+		ruleOne.setPosition(800, 270);  window.draw(ruleOne);
+		ruleTwo.setPosition(800, 370);  window.draw(ruleTwo);
+		ruleThree.setPosition(800, 470);  window.draw(ruleThree);
+		rule1.setPosition(800, 260);  window.draw(rule1);
+		rule2.setPosition(800, 360);  window.draw(rule2);
+		rule3.setPosition(800, 460);  window.draw(rule3);
+
 		window.display();  
 	}
 

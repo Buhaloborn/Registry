@@ -109,7 +109,7 @@ void Bullet::update(float time, float xpos, float ypos)
 					for (int i = y / 32; i < (y + h) / 32; i++)//проходимся по элементам карты
 						for (int j = x / 32; j < (x + w) / 32; j++)
 						{
-							if (TileMap[i][j] == '0' || time > 30 + rand()%(15))//если пуля пересекается с краем карты или
+							if (TileMap[i][j] == '0' || time > 50 + rand()%(15))//если пуля пересекается с краем карты или
 								life = false;									//не успевает долететь до игрока, то умирает
 						}
 					sprite.setPosition(x + w, y);//задается позиция пули
