@@ -14,13 +14,12 @@ public:
 		state = stay;
 		if (name == "Player")
 		{
-			//Задаем спрайту один прямоугольник для вывода одного игрока. IntRect – для приведения типов 
 			sprite.setTextureRect(IntRect(40, 172, w, h));
 		}
 	}
 
 	void checkCollisionWithMap(float Dx, float Dy);
 	void control();
-	void update(float time, float xpos, float ypos); //метод "оживления обновления" объекта класса. 
+	void update(float time, float xpos, float ypos); //метод "оживления" объекта класса. 
 };
 #endif

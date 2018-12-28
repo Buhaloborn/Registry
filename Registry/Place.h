@@ -4,12 +4,15 @@ using namespace sf;
 class Place
 {
 	public:
-		Texture texture;//сфмл текстура 
-		Sprite sprite;//сфмл спрайт
+		Texture texture;
+		Sprite sprite;
 		float x, y;int w, h;
 		float CurrentFrame;
+		
 		Place(Image &image, float X, float Y, int W, int H);
+		
 		bool isOpen;
 		void update(float time);
+		
 		FloatRect getRect();
 };

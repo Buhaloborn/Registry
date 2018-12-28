@@ -7,22 +7,20 @@ using namespace std;
 ////////////////////////////Абстрактная сущность//////////////////////// 
 class Entity {
 public:
-	enum { left, right, up, down, stay } state;// тип перечисления - состояние объекта 
+	enum { left, right, up, down, stay } state;//состояния объекта 
 	float dx, dy, x, y, speed, moveTimer;
 	int w, h;
 	float health;
 	bool life; //жизнь, логическая 
-	Texture texture;//сфмл текстура 
-	Sprite sprite;//сфмл спрайт 
-
+	Texture texture;
+	Sprite sprite;
 
 	float CurrentFrame;//хранит текущий кадр 
-	string name;//враги могут быть разные, врагов можно различать по именам 
-				//каждому можно дать свое действие в update() в зависимости от имени 
+	string name;
 
 	Entity(Image &image, float X, float Y, int W, int H, std::string Name);
 
-	FloatRect getRect(); //метод получения прямоугольника. его коорд, размеры (шир,высот). 
+	FloatRect getRect();
 
 	virtual void update(float time, float xpos, float ypos) = 0;
 };

@@ -1,8 +1,6 @@
 #include "Bullet.h"
 #include "map.h"
 
-
-
 void Bullet::update(float time, float xpos, float ypos) 
 {
 	if (name == "Bullet")
@@ -34,7 +32,6 @@ void Bullet::update(float time, float xpos, float ypos)
 					direction = 0;  //north
 				else direction = 4; //south
 		////////в зависимости от положения игрока, тапки будут на него наводиться////////
-
 		////////присвоение dx и dy в зависимости от направления
 			switch (direction)
 			{
@@ -93,12 +90,9 @@ void Bullet::update(float time, float xpos, float ypos)
 					CurrentFrame -= 8;
 				sprite.setTextureRect(IntRect(210 - 30 * int(CurrentFrame), 0, 30, 30));
 				break;// north west
-			}
-
-				
-				
-					x += dx * time;//само движение пули по х
-					y += dy * time;//по у
+			}					
+					x += dx * time;
+					y += dy * time;
 
 					if (x <= 0) x = 10;// задержка пули в левой стене, чтобы при проседании кадров она случайно
 					if (y <= 0) y = 10;// не вылетела за предел карты и не было ошибки (сервер может тормозить!)

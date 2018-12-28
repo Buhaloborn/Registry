@@ -34,16 +34,12 @@ int main()
 
 	Player p(heroImage, 492, 453, 40, 86, "Player");
 		
-	
 	list<Enemy*>  Enemies; //список врагов
 	list<Enemy*>::iterator ite;
 	list<Bullet*>  Bullets; //список пуль
 	list<Bullet*>::iterator itr;
 	list <Place*> windows;
 	list <Place*>::iterator it;
-
-
-
 
 	const int W_COUNT = 6; //максимальное количество окон в игре
 	int wCount = 0; //текущее количество окон в игре
@@ -54,8 +50,7 @@ int main()
 	{
 		float xr = 150 + rand() % 500; //случайная координата врага на поле игры по оси “x”
 		float yr = 150 + rand() % 350; //случайная координата врага на поле игры по оси “y”
-									   //создаем врагов и помещаем в список
-		Enemies.push_back(new Enemy(EnemyImage, xr, yr, 40, 86, "Psycho"));
+		Enemies.push_back(new Enemy(EnemyImage, xr, yr, 40, 86, "Psycho")); //создаем врагов и помещаем в список
 		eCount += 1; //увеличили счётчик врагов
 	}
 
@@ -70,8 +65,6 @@ int main()
 	Clock clock, test,enemyclock;
 	Clock gameTimeClock;
 
-	
-
 	float gameTime = 0; 
 	float createBullet = 0;
 	// Основной (бесконечный) цикл 
@@ -84,16 +77,30 @@ int main()
 		clock.restart();
 		time = time / 800;
 		Event event;
-		while (window.pollEvent(event)) //Опрос событий 
+		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 				window.close();//Закрываем окно, если событие “Closed” 
 		}
 
-		/////////////////////////////////////////Прорисовка выстрелов////////////////////////////////////////////////////////////
+		///////////////////////////////////Оживление объектов/////////////////////////////////////
+		p.update(time, p.x, p.y); //Игрока
 
+		for (ite = Enemies.begin(); ite != Enemies.end(); ite++) //Врагов
+		{
+			(*ite)->update(time, p.x, p.y); //запускаем метод update()
+		}
 
+		for (it = windows.begin(); it != windows.end(); it++) //Окон
+		{
+			(*it)->update(time);//применяем метод update(time) класса Place для объектов из списка
+		}
+		
+		for (itr = Bullets.begin(); itr != Bullets.end(); itr++) //Пуль
 
+		{
+			(*itr)->update(time, p.x, p.y); //запускаем метод update() для пуль 
+		}
 
 		/////////////////Смена направления///////////		
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
@@ -106,17 +113,14 @@ int main()
 			}
 		}
 
-
-		/////////////Рандомные выстрелы/////////////////////////////////////////
+		/////////////Генерация выстрелов/////////////////////////////////////////
 
 		if (p.PlayerScore > 0)
 		{
 			int testTime = test.getElapsedTime().asSeconds();
-			//	cout << testTime <<"       " << createBullet << endl;
 			if (createBullet < 300) {
 				createBullet += testTime;
 			}
-
 			else
 			{
 				for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
@@ -130,60 +134,26 @@ int main()
 				test.restart();
 			}
 		}
-		///////////////////////////////////Player download/////////////////////////////////////
-		p.update(time, p.x, p.y);
 
-		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
-		{
-			(*ite)->update(time, p.x, p.y); //запускаем метод update()
-		}
-
-		//рисуем врагов
-		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
-		{
-			window.draw((*ite)->sprite); //рисуем enemies объекты
-		}
-
-		/////////////////////////////////////////////Загрузка пули/////////////////////////////
-		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
-
-		{
-			(*itr)->update(time, p.x, p.y); //запускаем метод update() для пуль 
-		}
-
-
-		///////////////////////////////////// Windoows actions/////////////////////////////////////////////////////////
-		for (it = windows.begin(); it != windows.end(); it++)
-		{
-			(*it)->update(time);//применяем метод update(time) класса Place для объектов из списка
-		}
-
-		if (p.PlayerScore > 0)
-			p.PlayerScore -= 0.02;	//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
-		if (p.PlayerScore < 0)
-			p.PlayerScore = 0;
-
-		////////////////////////////////пересечение с окном//////////////////////////////////
-		for (it = windows.begin(); it != windows.end(); it++)
+		///////////////////////////////////// Пересечения/////////////////////////////////////////////////////////
+		////////////////////////С окнами////////////////////////////
+		for (it = windows.begin(); it != windows.end(); it++) //С окнами//
 			if (p.getRect().intersects((*it)->getRect()) && (*it)->isOpen)
-
 			{																	//проверка пересечения игрока с окном
 				p.PlayerScore += 80;											//начисление очков, если окно открыто
 				(*it)->CurrentFrame = 1;										//закрытие окна после получения очков
 			}
-		//////////////////////////////////Проверка пересечения ИГрока с тапками /////////////////////////////////////////////////
-
+		/////////////////////////Игрока со снарядами //////////////////////////////////
 		if (p.life == true) {												//если игрок жив
 			for (itr = Bullets.begin(); itr != Bullets.end(); itr++) {						//бежим по списку врагов
 				if ((*itr)->getRect().intersects(p.getRect()) && ((*itr)->name == "Bullet"))
 				{
-					p.PlayerScore -= 50;
+					p.PlayerScore -= 50; //снятие очков
 					(*itr)->life = false;
-
 				}
 			}
 		}
-		/////////////// на пересечение врага и перса 
+		///////////////Врага и игрока/////////////// 
 		if (p.life == true) //если игрок жив
 		{															
 			int ToW = enemyclock.getElapsedTime().asMilliseconds();
@@ -195,67 +165,55 @@ int main()
 					{
 						if ((p.getRect().intersects((*ite)->getRect())) && ((*ite)->name == "Psycho") && p.invinc == false)
 						{
-							p.PlayerScore -= 100;
-							p.invinc = true;
+							p.PlayerScore -= 100; //забираем очки
+							p.invinc = true; //даем временную неуязвимость
 						}
 					}
 					enemyclock.restart();
 				}
 				p.invinc = false;
 		}
-		for (itr = Bullets.begin(); itr != Bullets.end(); )				//говорим что проходимся от начала до конца
-		{																// если этот объект мертв, то удаляем его
+
+
+		////////////////Очистка контейнера с пулями/////////////
+		for (itr = Bullets.begin(); itr != Bullets.end(); )				//проходимся от начала до конца
+		{																//если этот объект мертв, то удаляем его
 			Bullet *t = *itr;
 			t->update(time,p.x,p.y);
-
 			if (t->life == false)
 			{
 				itr = Bullets.erase(itr);
 				delete t;
 			}
 				else
-				itr++;													//и идем курсором (итератором) к след объекту.
+				itr++; //и идем итератором к след объекту.
 		}
-		///////////////////////////////////////////////////////////////////////////////////
+	
 		window.clear(); 
-
-		Font font;
-		font.loadFromFile("Fonts/GothaProMed.otf");
-		Text text("", font, 20);												//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер
-																				//шрифта(в пикселях)
-
 
 		//////////////////////////////////Карта//////////////////////////////////////////
 		for (int i = 0; i < Height_Map; i++)
 			for (int j = 0; j < Width_Map; j++)
 			{
 				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(0, 0, 32, 32));//если встретили 0, то рисуем 1й квадратик 
-
 				if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(32, 0, 32, 32)); //если встретили пробел, то рисуем 2й квадратик 
-
 				if ((TileMap[i][j] == 'X')) s_map.setTextureRect(IntRect(96, 0, 32, 32));//если встретили X, то рисуем 4й квадратик (дверь)
-
 				s_map.setPosition(j * 32, i * 32);											//раскладываем квадратики в карту. 
-
-				window.draw(s_map);															//рисуем квадратики на экран 
+				window.draw(s_map);													
 			}
-		//////////////////////////////////////////////////////////////////////////////
+		
+		///////////////////////////////Отрисовка объектов///////////////////////////////////////////////
+		window.draw(p.sprite); //игрок
 
-		for (it = windows.begin();it != windows.end();it++)
+		for (it = windows.begin();it != windows.end();it++) //окна
 		{
 			window.draw((*it)->sprite);
 		}
-		
-		window.draw(p.sprite);
-		///////////////////////////////////////////рисуем врагов/////////////////////
-
 
 		for (ite = Enemies.begin(); ite != Enemies.end(); ite++)
 		{
 			window.draw((*ite)->sprite); //рисуем enemies объекты
 		}
-		///////////////////////////////draw bullets//////////////////////////////////
-
 		
 		for (itr = Bullets.begin(); itr != Bullets.end(); itr++)
 		{
@@ -263,7 +221,13 @@ int main()
 				window.draw((*itr)->sprite); //рисуем объекты
 		}
 		
-		////// stop moving
+		/////////Снятие очков со временем/////
+		if (p.PlayerScore > 0)
+			p.PlayerScore -= 0.02;	//со временем очки сгорают, если счёт дойдет до нуля, игра окончена
+		if (p.PlayerScore < 0)
+			p.PlayerScore = 0;
+
+		////// Конец игры/////////
 		if (p.PlayerScore <= 0) 
 		{
 			p.life = false;
@@ -275,19 +239,19 @@ int main()
 			{
 				(*it)->CurrentFrame = 1;
 			}
-
 		}
 		
-		ostringstream playerScoreString; // объявили переменную
+		Font font;
+		font.loadFromFile("Fonts/GothaProMed.otf");
+		Text text("", font, 20);//создаем объект текст. Помещаем в объект текст-строку, шрифт, размер шрифта(в пикселях)
+		ostringstream playerScoreString; 
 
 		playerScoreString << int (p.PlayerScore); //занесли в нее число очков, то есть формируем строку
-		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем
-																	 //сформированную выше строку методом .str()
+		text.setString("Points: " + playerScoreString.str()); //задаем строку тексту и вызываем сформированную выше строку методом .str()
 		text.setPosition(500, 500);//задаем позицию текста
 		window.draw(text);//рисуем этот текст
 		
 		window.display();  
 	}
-
 	return 0;
 }
